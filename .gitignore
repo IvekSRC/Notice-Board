@@ -1,3 +1,7 @@
+# Env files
+production.env
+development.env
+
 # Logs
 logs
 *.log
