@@ -1,0 +1,88 @@
+const express = require('express');
+const { authForCompany } = require('../middlewares/auth.middleware');
+const router = new express.Router();
+const {
+    getCompanys,
+    getCompany,
+    updateCompany,
+    deleteCompany
+} = require('../services/company.service');
+
+// Get All Companys
+router.get('/companys', async (req, res) => {
+  try {
+    const companys = await getCompanys();
+
+    if (!companys) {
+      return res.status(404).json();
+    }
+
+    return res.json(companys);
+  } catch (error) {
+    res.status(500).json();
+  }
+});
+
+// Get Company By Id
+router.get('/companys/:id', async (req, res) => {
+    const { params: { id } } = req;
+
+    try {
+        const company = await getCompany(id);
+
+        if (!company) {
+        return res.status(404).json();
+        }
+
+        res.json(company);
+    } catch (error) {
+        res.status(500).json();
+    }
+});
+
+// Update Company
+router.patch(
+    '/companys',
+    authForCompany,
+    async (req, res) => {
+      const { body: validatedBody, company: { id } } = req;
+  
+      try {
+        const updatedCompany = await updateCompany(id, validatedBody);
+  
+        if (!updatedCompany) {
+          return res.status(404).json();
+        }
+  
+        await updatedCompany.save();
+  
+        res.json(updatedCompany);
+      } 
+      catch (error) {
+        res.status(422).json(error.message);
+      }
+    }
+);
+
+// Delete Company
+router.delete(
+    '/companys',
+    authForCompany,
+    async (req, res) => {
+      const { id } = req.company;
+  
+      try {
+        const company = await deleteCompany(id);
+  
+        if (!company) {
+          return res.status(404).json();
+        }
+  
+        res.status(200).json(company);
+      } catch (error) {
+        res.status(400).json(error.message);
+      }
+    }
+);
+
+module.exports = router;
