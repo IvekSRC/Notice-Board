@@ -133,7 +133,7 @@ router.delete(
     const { company: { id } } = req;
 
     await deleteLogo(id, LOGO);
-    res.json('Logo deleted succesfully.');
+    res.status(404).json('Logo deleted succesfully.');
   }
 );
 

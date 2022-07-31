@@ -1,5 +1,6 @@
 const { User } = require('../models');
 const { userUpdateSchema } = require('../validators/index');
+const fs = require('fs');
 
 const getUsers =  async () => {
     return User.find({});
@@ -37,9 +38,44 @@ const deleteUser = async (id) => {
     return null;
 }
 
+const addProfilePicture = async (id, profilePicture) => {
+    const user = await User.findById(id);
+  
+    if(user) {
+      user.profilePicture = profilePicture;
+      await user.save();
+    } else {
+      throw new Error("Can't found user.")
+    }
+}
+
+const deleteProfilePicture = async (id, profilePicture) => {
+    const user = await User.findById(id);
+  
+    if (!user || !user.profilePicture) {
+      throw new Error("Can't found.");
+    }
+    else {
+      fs.unlink(
+        `public/images/${profilePicture}/${user.profilePicture}`,
+        async function(err) {
+          if(err) {
+            throw new Error(err.message);
+          }
+          else {
+            user.profilePicture = undefined;
+            await user.save();
+          }
+        }
+      )
+    }
+}
+
 module.exports = {
     getUsers,
     getUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    addProfilePicture,
+    deleteProfilePicture
 };
