@@ -5,8 +5,12 @@ const {
     getCompanys,
     getCompany,
     updateCompany,
-    deleteCompany
+    deleteCompany,
+    addLogo,
+    deleteLogo
 } = require('../services/company.service');
+const { LOGO } = require('../constants/folderNames.constants');
+const upload = require('../middlewares/upload.middleware');
 
 // Get All Companys
 router.get('/companys', async (req, res) => {
@@ -83,6 +87,54 @@ router.delete(
         res.status(400).json(error.message);
       }
     }
+);
+
+// Add Logo To Login Company
+router.post(
+  '/companys/logo',
+  authForCompany,
+  upload.single(LOGO),
+  async (req, res) => {
+    const { company: { id }, generatedFileName } = req;
+
+    await addLogo(id, generatedFileName);
+
+    res.json('Logo upload succesfully.');
+  },
+  (error, req, res) => {
+    res.status(400).json({ error: error.message });
+  }
+);
+
+// GET Logo
+router.get('/companys/:id/logo',
+  async (req, res) => {
+  const { params: { id } } = req;
+
+  try {
+    const company = await getCompany(id);
+
+    if (!company || !company.logo) {
+      throw new Error('Logo does not exist.');
+    }
+
+    res.set('Content-Type', 'image/png');
+    res.redirect(company.logoUrl);
+  } catch (error) {
+    res.status(404).json();
+  }
+});
+
+// Delete Logo For Login Company
+router.delete(
+  '/companys/logo',
+  authForCompany,
+  async (req, res) => {
+    const { company: { id } } = req;
+
+    await deleteLogo(id, LOGO);
+    res.json('Logo deleted succesfully.');
+  }
 );
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const { Company } = require('../models');
-const { companyUpdateSchema } = require('../validators/index')
+const { companyUpdateSchema } = require('../validators/index');
+const fs = require('fs');
 
 const getCompanys =  async () => {
     return Company.find({});
@@ -37,9 +38,44 @@ const deleteCompany = async (id) => {
     return null;
 }
 
+const addLogo = async (id, logo) => {
+    const company = await Company.findById(id);
+  
+    if(company) {
+      company.logo = logo;
+      await company.save();
+    } else {
+      throw new Error("Can't found company.")
+    }
+}
+
+const deleteLogo = async (id, logo) => {
+    const company = await Company.findById(id);
+  
+    if (!company || !company.logo) {
+      throw new Error("Can't found.");
+    }
+    else {
+      fs.unlink(
+        `public/images/${logo}/${company.logo}`,
+        async function(err) {
+          if(err) {
+            throw new Error(err.message);
+          }
+          else {
+            company.logo = undefined;
+            await company.save();
+          }
+        }
+      )
+    }
+}
+
 module.exports = {
     getCompanys,
     getCompany,
     updateCompany,
-    deleteCompany
+    deleteCompany,
+    addLogo,
+    deleteLogo
 };

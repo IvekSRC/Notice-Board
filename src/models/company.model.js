@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { COMPANY } = require("../constants/modelNames.constant");
+const { API_URL } = require('../../config');
+const { LOGO } = require('../constants/folderNames.constants');
 
 const companySchema = new mongoose.Schema({
     email: {
@@ -27,6 +29,13 @@ const companySchema = new mongoose.Schema({
         type: String
     }
 });
+
+companySchema.virtual('logoUrl')
+  .get(
+    function() { 
+      return `${API_URL}/images/${LOGO}/${this.logo}` 
+    }
+);
 
 companySchema.virtual('userCompanyRef', {
     ref: "User",
