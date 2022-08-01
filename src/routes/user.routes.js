@@ -114,10 +114,10 @@ router.get('/users/:id/profilePicture',
   try {
     const user = await getUser(id);
 
-    if (!user || !user.profilePicture) {
+    if (!user.profilePicture) {
       throw new Error('Profile picture does not exist.');
     }
-
+    
     res.set('Content-Type', 'image/png');
     res.redirect(user.profilePictureUrl);
   } catch (error) {

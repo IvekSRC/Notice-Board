@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const { ANNOUNCEMENT } = require("../constants/modelNames.constant");
+const { PICTURE } = require("../constants/folderNames.constants");
+const { API_URL } = require("../../config");
 
 const announcementSchema = new mongoose.Schema({
     name: {
@@ -38,6 +40,13 @@ const announcementSchema = new mongoose.Schema({
         require: true
     }
 });
+
+announcementSchema.virtual('pictureUrl')
+  .get(
+    function() { 
+      return `${API_URL}/images/${PICTURE}/${this.picture}` 
+    }
+);
 
 announcementSchema.virtual("announcementCompanyRef", {
     ref: "Company",

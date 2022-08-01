@@ -1,4 +1,5 @@
 const express = require('express');
+const { PICTURE } = require('../constants/folderNames.constants');
 const { authForCompany } = require('../middlewares/auth.middleware');
 const router = new express.Router();
 const upload = require('../middlewares/upload.middleware');
@@ -7,7 +8,10 @@ const {
     updateAnnouncement,
     getAnnouncement,
     getMyAnnouncement,
-    deleteAnnouncement
+    deleteAnnouncement,
+    addPicture,
+    deletePicture,
+    getPicture
 } = require('../services/announcement.service');
 
 // Create Announcement
@@ -95,5 +99,60 @@ router.delete('/announcements/:id', authForCompany, async (req, res) => {
       res.status(400).json(error.message);
     }
 });
+
+// Add Picture To Announcement
+router.post(
+  '/announcements/:id/picture',
+  authForCompany,
+  upload.single(PICTURE),
+  async (req, res) => {
+    const { company: { _id: companyId }, params: { id: idAnnouncement }, generatedFileName } = req;
+    
+    try {
+      const announcement = await addPicture(companyId, idAnnouncement, generatedFileName);
+  
+      if (!announcement) {
+        return res.status(404).json();
+      }
+  
+      res.status(200).json("Announcement picture upload successfully.");
+    } catch (error) {
+      res.status(400).json(error.message);
+    }
+  },
+  (error, req, res) => {
+    res.status(400).json({ error: error.message });
+  }
+);
+
+// GET Picture of Announcement
+router.get('/announcements/:id/picture', authForCompany, async (req, res) => {
+  const { params: { id: idAnnouncement }, company: { _id: companyId } } = req;
+  
+  try {
+    const announcement = await getPicture(idAnnouncement, companyId);
+    
+    if (!announcement.picture) {
+      throw new Error('Announcement picture does not exist.');
+    }
+    
+    res.set('Content-Type', 'image/png');
+    res.redirect(announcement.pictureUrl);
+  } catch (error) {
+    res.status(404).json();
+  }
+});
+
+// Delete Picture for Announcement
+router.delete(
+  '/announcements/:id/picture',
+  authForCompany,
+  async (req, res) => {
+    const { params: { id }, company: { _id: companyId } } = req;
+    
+    await deletePicture(id, companyId);
+    res.json('Announcement picture deleted succesfully.');
+  }
+);
 
 module.exports = router;

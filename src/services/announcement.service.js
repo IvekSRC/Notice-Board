@@ -2,6 +2,7 @@ const { Announcement } = require('../models');
 const fs = require('fs');
 const expiresAnnouncement = require('./cron.service');
 const { announcementUpdateSchema } = require('../validators');
+const { PICTURE } = require('../constants/folderNames.constants');
 
 const createAnnouncement = async (body, id) => {
     // The default end time will be one minute after the auction is created
@@ -69,10 +70,68 @@ const deleteAnnouncement = async (companyId, announcementId) => {
     return null;
 }
 
+const addPicture = async (companyId, idAnnouncement, picture) => {
+  const announcement = await Announcement.findById(idAnnouncement);
+  
+  if (announcement.companyId.toString() != companyId.toString()) {
+    throw new Error('You can modify just your announcement.');
+  }
+
+  if(announcement) {
+    announcement.picture = picture;
+    await announcement.save();
+    return announcement;
+  }
+
+  return null;
+}
+
+const getPicture = async (idAnnouncement, companyId) => {
+  const announcement = await Announcement.findById(idAnnouncement);
+  
+  if (announcement.companyId.toString() != companyId.toString()) {
+    throw new Error('You can get picture just for your announcement.');
+  }
+
+  if(announcement.picture) {
+    return announcement;
+  }
+
+  return null;
+}
+
+const deletePicture = async (announcementId, companyId) => {
+  const announcement = await Announcement.findById(announcementId);
+
+  if (!announcement || !announcement.picture) {
+    throw new Error("Can't found.");
+  }
+  
+  if (announcement.companyId.toString() != companyId.toString()) {
+    throw new Error('You can delete picture just for your announcement.');
+  }
+  
+  fs.unlink(
+    `public/images/${PICTURE}/${announcement.picture}`,
+    async function(err) {
+      if(err) {
+        throw new Error(err.message);
+      }
+      else {
+        announcement.picture = undefined;
+        await announcement.save();
+      }
+    }
+  )
+}
+
 module.exports = {
     createAnnouncement,
     updateAnnouncement,
     getAnnouncement,
     getMyAnnouncement,
-    deleteAnnouncement
+    deleteAnnouncement,
+    addPicture,
+    deletePicture,
+    getPicture
 };
