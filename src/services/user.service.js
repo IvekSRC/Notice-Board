@@ -1,6 +1,7 @@
 const { User } = require('../models');
 const { userUpdateSchema } = require('../validators/index');
-const fs = require('fs');
+const { PROFILE_PICTURE } = require('../constants/folderNames.constants');
+const deleteFile = require('./picture.service');
 
 const getUsers =  async () => {
     return User.find({});
@@ -42,6 +43,10 @@ const addProfilePicture = async (id, profilePicture) => {
     const user = await User.findById(id);
   
     if(user) {
+      if(user.profilePicture) {
+        await deleteFile(PROFILE_PICTURE, user.profilePicture);
+      }
+
       user.profilePicture = profilePicture;
       await user.save();
     } else {
@@ -56,18 +61,10 @@ const deleteProfilePicture = async (id, profilePicture) => {
       throw new Error("Can't found.");
     }
     else {
-      fs.unlink(
-        `public/images/${profilePicture}/${user.profilePicture}`,
-        async function(err) {
-          if(err) {
-            throw new Error(err.message);
-          }
-          else {
-            user.profilePicture = undefined;
-            await user.save();
-          }
-        }
-      )
+      await deleteFile(PROFILE_PICTURE, user.profilePicture);
+      
+      user.profilePicture = undefined;
+      await user.save();
     }
 }
 

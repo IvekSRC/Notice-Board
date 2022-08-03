@@ -3,6 +3,7 @@ const fs = require('fs');
 const expiresAnnouncement = require('./cron.service');
 const { announcementUpdateSchema } = require('../validators');
 const { PICTURE } = require('../constants/folderNames.constants');
+const deleteFile = require('./picture.service');
 
 const createAnnouncement = async (body, id) => {
     // The default end time will be one minute after the auction is created
@@ -78,6 +79,10 @@ const addPicture = async (companyId, idAnnouncement, picture) => {
   }
 
   if(announcement) {
+    if(announcement.picture) {
+      await deleteFile(PICTURE, announcement.picture);
+    }
+
     announcement.picture = picture;
     await announcement.save();
     return announcement;
@@ -111,18 +116,9 @@ const deletePicture = async (announcementId, companyId) => {
     throw new Error('You can delete picture just for your announcement.');
   }
   
-  fs.unlink(
-    `public/images/${PICTURE}/${announcement.picture}`,
-    async function(err) {
-      if(err) {
-        throw new Error(err.message);
-      }
-      else {
-        announcement.picture = undefined;
-        await announcement.save();
-      }
-    }
-  )
+  await deleteFile(PICTURE, announcement.picture);
+  announcement.picture = undefined;
+  await announcement.save();
 }
 
 module.exports = {

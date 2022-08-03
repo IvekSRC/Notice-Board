@@ -1,6 +1,8 @@
 const { Company } = require('../models');
 const { companyUpdateSchema } = require('../validators/index');
 const fs = require('fs');
+const deleteFile = require('./picture.service');
+const { LOGO } = require('../constants/folderNames.constants');
 
 const getCompanys =  async () => {
     return Company.find({});
@@ -42,6 +44,10 @@ const addLogo = async (id, logo) => {
     const company = await Company.findById(id);
   
     if(company) {
+      if(company.logo) {
+        await deleteFile(LOGO, company.logo);
+      }
+
       company.logo = logo;
       await company.save();
     } else {
@@ -56,18 +62,10 @@ const deleteLogo = async (id, logo) => {
       throw new Error("Can't found.");
     }
     else {
-      fs.unlink(
-        `public/images/${logo}/${company.logo}`,
-        async function(err) {
-          if(err) {
-            throw new Error(err.message);
-          }
-          else {
-            company.logo = undefined;
-            await company.save();
-          }
-        }
-      )
+      await deleteFile(LOGO, company.logo);
+
+      company.logo = undefined;
+      await company.save();
     }
 }
 
