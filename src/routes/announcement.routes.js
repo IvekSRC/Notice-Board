@@ -6,13 +6,14 @@ const upload = require('../middlewares/upload.middleware');
 const {
     createAnnouncement,
     updateAnnouncement,
-    getAnnouncement,
     getMyAnnouncement,
     deleteAnnouncement,
     addPicture,
     deletePicture,
     getPicture
 } = require('../services/announcement.service');
+const { getPaginated } = require('../services/pagination.service');
+const { Announcement } = require('../models');
 
 // Create Announcement
 router.post('/announcements', authForCompany, async (req, res) => {
@@ -54,13 +55,17 @@ router.patch(
 // Get All Announcement
 router.get('/announcements', async (req, res) => {
     try {
-      const announcement = await getAnnouncement();
+      const results = await getPaginated(Announcement, req, res);
   
-      if (!announcement) {
+      if (!results) {
         return res.status(404).json();
       }
   
-      return res.json(announcement);
+      res.json({
+        TotalPages: results.totalPages,
+        CurrentPage: results.currentPage,
+        Items: results.results,
+      });
     } catch (error) {
       res.status(500).json();
     }
@@ -71,13 +76,18 @@ router.get('/announcements/me', authForCompany, async (req, res) => {
     const { company: { id: companyId } } = req;
 
     try {
-      const announcement = await getMyAnnouncement(companyId);
+      req.parentReference = { companyId: companyId }
+      const results = await getPaginated(Announcement, req, res);
   
-      if (!announcement) {
+      if (!results) {
         return res.status(404).json();
       }
   
-      return res.json(announcement);
+      res.json({
+        TotalPages: results.totalPages,
+        CurrentPage: results.currentPage,
+        Items: results.results,
+      });
     } catch (error) {
       res.status(500).json();
     }

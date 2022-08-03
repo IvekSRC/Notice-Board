@@ -2,7 +2,6 @@ const express = require('express');
 const { authForUser } = require('../middlewares/auth.middleware');
 const router = new express.Router();
 const {
-    getUsers,
     getUser,
     updateUser,
     deleteUser,
@@ -11,17 +10,23 @@ const {
 } = require('../services/user.service');
 const { PROFILE_PICTURE } = require('../constants/folderNames.constants');
 const upload = require('../middlewares/upload.middleware');
+const { getPaginated } = require('../services/pagination.service');
+const { User } = require('../models');
 
 // Get All Users
 router.get('/users', async (req, res) => {
   try {
-    const users = await getUsers();
+    const results = await getPaginated(User, req, res);
 
-    if (!users) {
+    if (!results) {
       return res.status(404).json();
     }
 
-    return res.json(users);
+    res.json({
+      TotalPages: results.totalPages,
+      CurrentPage: results.currentPage,
+      Items: results.results,
+    });
   } catch (error) {
     res.status(500).json();
   }

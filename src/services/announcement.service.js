@@ -33,9 +33,9 @@ const updateAnnouncement = async (idCompany, validatedBody, idAnnouncement) => {
       if (announcement.companyId._id.toString() != idCompany._id.toString()) {
         throw new Error('You can modify just your items.');
       }
-      console.log('stigo')
+      
       const validated = await announcementUpdateSchema.validateAsync(validatedBody);
-      console.log('stigo2')
+      
       const updates = Object.keys(validated);
       updates.forEach((update) => {
         announcement[update] = validated[update];

@@ -2,7 +2,6 @@ const express = require('express');
 const { authForCompany } = require('../middlewares/auth.middleware');
 const router = new express.Router();
 const {
-    getCompanys,
     getCompany,
     updateCompany,
     deleteCompany,
@@ -11,17 +10,23 @@ const {
 } = require('../services/company.service');
 const { LOGO } = require('../constants/folderNames.constants');
 const upload = require('../middlewares/upload.middleware');
+const { getPaginated } = require('../services/pagination.service');
+const { Company } = require('../models');
 
 // Get All Companys
 router.get('/companys', async (req, res) => {
   try {
-    const companys = await getCompanys();
+    const results = await getPaginated(Company, req, res);
 
-    if (!companys) {
+    if (!results) {
       return res.status(404).json();
     }
 
-    return res.json(companys);
+    res.json({
+      TotalPages: results.totalPages,
+      CurrentPage: results.currentPage,
+      Items: results.results,
+    });
   } catch (error) {
     res.status(500).json();
   }
