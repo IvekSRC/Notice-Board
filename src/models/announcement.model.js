@@ -31,6 +31,11 @@ const announcementSchema = new mongoose.Schema({
         type: Boolean,
         require: true
     },
+    private: {
+        type: Boolean,
+        require: true,
+        default: false
+    },
     picture: {
         type: String
     },
