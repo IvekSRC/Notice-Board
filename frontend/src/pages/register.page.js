@@ -1,12 +1,11 @@
 import NavigationBar from "../components/navigationBar.component";
+import RegisterForm from "../components/registerForm.component";
 
 const Register = () => {
   return (
     <>
-      <div>
-        <NavigationBar />
-      </div>
-      <p>Register</p>
+      <NavigationBar/>      
+      <RegisterForm/>
     </>
   )
 }

@@ -2,18 +2,18 @@ import React from "react";
 import NavigationBar from "../components/navigationBar.component";
 import { fetchData } from "../fetchData/fetchFunction";
 import { useState, useEffect } from "react";
+import Announcement from "../components/announcement.component";
 
 const Home = () => {
     const [announcements, setAnnouncements] = useState([]);
 
-    // Fetch Announcements
     useEffect(() => {
-        const getAnnouncements = async () => {
-            const announcementsFromServer = await fetchData("announcements");
-            setAnnouncements(announcementsFromServer);
+        const getApiData = async () => {
+            const response = await (await fetchData('announcements')).json();
+            setAnnouncements(response.Items);
         }
 
-        getAnnouncements();
+        getApiData();
     }, []);
 
     return (
@@ -21,7 +21,13 @@ const Home = () => {
         <div>
             <NavigationBar />
 
-            
+            <div className="announcements">
+                {announcements.map((announcement) => (
+                    <div className="announcement" key={announcement._id}>
+                        <Announcement announcement={announcement}/>
+                    </div>
+                ))}
+            </div>
         </div>
     </>
     )

@@ -47,8 +47,8 @@ const updateAnnouncement = async (idCompany, validatedBody, idAnnouncement) => {
     }
 }
 
-const getAnnouncement =  async () => {
-    return Announcement.find({});
+const getAnnouncement =  async (announcementId) => {
+    return Announcement.findById({ _id: announcementId });
 }
 
 const getMyAnnouncement = async (idOfCompany) => {
@@ -93,9 +93,11 @@ const addPicture = async (companyId, idAnnouncement, picture) => {
 
 const getPicture = async (idAnnouncement, companyId) => {
   const announcement = await Announcement.findById(idAnnouncement);
-  
-  if (announcement.companyId.toString() != companyId.toString()) {
-    throw new Error('You can get picture just for your announcement.');
+
+  if(announcement.private == true) {  
+    if (announcement.companyId.toString() != companyId.toString()) {
+      throw new Error('You can get picture just for your announcement.');
+    }
   }
 
   if(announcement.picture) {

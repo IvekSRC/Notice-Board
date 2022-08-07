@@ -10,7 +10,8 @@ const {
     deleteAnnouncement,
     addPicture,
     deletePicture,
-    getPicture
+    getPicture,
+    getAnnouncement
 } = require('../services/announcement.service');
 const { getPaginated } = require('../services/pagination.service');
 const { Announcement } = require('../models');
@@ -69,6 +70,19 @@ router.get('/announcements', async (req, res) => {
     } catch (error) {
       res.status(500).json();
     }
+});
+
+// Get Announcement
+router.get('/announcements/:id', async (req, res) => {
+  const { params: { id: idAnnouncement } } = req;
+
+  try {
+    const announcement = await getAnnouncement(idAnnouncement);
+    
+    return res.status(200).json(announcement);
+  } catch (error) {
+    res.status(404).json();
+  }
 });
 
 // Get My Announcement
@@ -141,6 +155,24 @@ router.get('/announcements/:id/picture', authForCompany, async (req, res) => {
   
   try {
     const announcement = await getPicture(idAnnouncement, companyId);
+    
+    if (!announcement.picture) {
+      throw new Error('Announcement picture does not exist.');
+    }
+    
+    res.set('Content-Type', 'image/png');
+    res.redirect(announcement.pictureUrl);
+  } catch (error) {
+    res.status(404).json();
+  }
+});
+
+// GET Picture of Announcement (No Authorization)
+router.get('/announcements/:id/publicPicture', async (req, res) => {
+  const { params: { id: idAnnouncement } } = req;
+  
+  try {
+    const announcement = await getAnnouncement(idAnnouncement)
     
     if (!announcement.picture) {
       throw new Error('Announcement picture does not exist.');
