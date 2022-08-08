@@ -4,7 +4,7 @@ const { Company, User } = require('../models/index');
 const { generateAuthToken, findByCredentials } = require('../services/auth.service');
 
 // Register Company
-router.post('/company/register', async (req, res) => {
+router.post('/companys/register', async (req, res) => {
     const company = new Company(req.body);
 
     try {
@@ -17,7 +17,7 @@ router.post('/company/register', async (req, res) => {
 });
 
 // Login Company
-router.post('/company/login', async (req, res) => {
+router.post('/companys/login', async (req, res) => {
     try {
       const company = await findByCredentials(
         req.body.email,
@@ -37,7 +37,7 @@ router.post('/company/login', async (req, res) => {
 });
 
 // Register User
-router.post('/user/register', async (req, res) => {
+router.post('/users/register', async (req, res) => {
     const user = new User(req.body);
 
     try {
@@ -50,7 +50,7 @@ router.post('/user/register', async (req, res) => {
 });
 
 // Login User
-router.post('/user/login', async (req, res) => {
+router.post('/users/login', async (req, res) => {
     try {
       const user = await findByCredentials(
         req.body.email,

@@ -1,14 +1,14 @@
 import NavigationBar from "../components/navigationBar.component";
 
-const Login = () => {
+const LoginUser = () => {
   return (
     <>
       <div>
         <NavigationBar />
       </div>
-      <p>Login</p>
+      <p>Login user</p>
     </>
   )
 }
 
-export default Login;
+export default LoginUser;

@@ -22,8 +22,24 @@ const companySchema = new mongoose.Schema({
         type: String,
         unique: true,
         minlength: 3,
-        require: true,
+        required: true,
         trim: true
+    },
+    firstName: {
+        type: String,
+        minlength: 2,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        minlength: 2,
+        required: true,
+    },
+    gender: {
+        type: String,
+    },
+    country: {
+        type: String,
     },
     logo: {
         type: String

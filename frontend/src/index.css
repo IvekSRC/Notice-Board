@@ -54,32 +54,59 @@ code {
 
 /* Navigation Bar  */
 
-.navBar {
+.navigationBarList {
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #333;
+  background-color: #38444d;
 }
 
-.navBarPart {
+.homeNavPart {
   float: left;
 }
 
-.navBarItem {
-  display: block;
+.dropdown {
+  float: right;
+}
+
+li a, .dropbtn {
+  display: inline-block;
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
 }
 
-.navBarItem:hover:not(.activeHome) {
-  background-color: #111;
+li a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
 }
 
-.activeHome {
-  background-color: #04AA6D;
+li.dropdown {
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }
 
 /* Announcement */
@@ -121,6 +148,10 @@ code {
 
 /* Register form */
 
+.registerCompanyPage {
+  height: 100vh;
+}
+
 .registrationFormHeaderText {
   margin: 5%;
   position: relative;
@@ -141,11 +172,11 @@ body {
 }
 .form_wrapper {
   background: #fff;
-  width: 400px;
-  max-width: 100%;
+  width: 40%;
+  height: 85%;
   box-sizing: border-box;
   padding: 25px;
-  margin: 4% auto 0;
+  margin: 2% auto 0;
   position: relative;
   z-index: 1;
   border-top: 5px solid #f5ba1a;
@@ -171,6 +202,7 @@ body {
   text-align: center;
   padding-bottom: 15px;
 }
+
 .form_wrapper h3 {
   font-size: 1.1em;
   font-weight: normal;
@@ -207,6 +239,12 @@ body {
   text-align: center;
   width: 30px;
 }
+
+.input_field {
+  margin-top: 3.5%;
+  margin-bottom: 3.5%;
+}
+
 .form_wrapper .input_field > span > i {
   padding-top: 10px;
 }
@@ -525,4 +563,16 @@ body {
 .registrationIcon {
   position: relative;
   margin: 35% 20% 20% 20%;
+}
+
+.form_container {
+  height: 80%;
+}
+
+.clearfixx {
+  height: 100%;
+}
+
+.registerCompanyForm {
+  height: 100%;
 }

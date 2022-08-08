@@ -1,18 +1,26 @@
-import { Link } from 'react-router-dom';
-
 const NavigationBar = () => {
   return (
-    <div className='navBar'>
-      <div className='navBarPart'>
-        <Link className='navBarItem activeHome' to="/">Home</Link>
-      </div>
-      <div className='navBarPart'>
-        <Link className='navBarItem' to="/register">Register</Link>
-      </div>
-      <div className='navBarPart'>
-        <Link className='navBarItem' to="/login">Login</Link>
-      </div>
-    </div>
+    <>
+      <ul className='navigationBarList'>
+        <li className="homeNavPart">
+          <a href="/">Home</a>
+        </li>
+        <li className="dropdown">
+          <a className="dropbtn">Register</a>
+          <div className="dropdown-content">
+            <a href="/registerCompany">Company</a>
+            <a href="/registerUser">User</a>
+          </div>
+        </li>
+        <li className="dropdown">
+          <a className="dropbtn">Login</a>
+          <div className="dropdown-content">
+            <a href="/loginCompany">Company</a>
+            <a href="/loginUser">User</a>
+          </div>
+        </li>
+      </ul>
+    </>
   )
 }
 
