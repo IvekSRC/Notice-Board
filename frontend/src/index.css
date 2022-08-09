@@ -70,6 +70,10 @@ code {
   float: right;
 }
 
+.registerDropDown {
+  margin-right: 3.5%;
+}
+
 li a, .dropbtn {
   display: inline-block;
   color: white;
@@ -107,6 +111,12 @@ li.dropdown {
 
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+.navBarIcon {
+  margin-left: 10px;
+  position: relative;
+  top: 2px;
 }
 
 /* Announcement */
@@ -150,6 +160,9 @@ li.dropdown {
 
 .registerCompanyPage {
   height: 100vh;
+  background-image: url('../public/images/registrationBackground.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .registrationFormHeaderText {
@@ -171,15 +184,17 @@ body {
   height: 0;
 }
 .form_wrapper {
-  background: #fff;
+  background: bottom;
   width: 40%;
-  height: 85%;
+  height: 90%;
   box-sizing: border-box;
   padding: 25px;
   margin: 2% auto 0;
+  margin-right: 45%;
   position: relative;
   z-index: 1;
-  border-top: 5px solid #f5ba1a;
+  border: 5px solid #01BCE7;
+  border-radius: 10px;
   -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
@@ -189,9 +204,6 @@ body {
   transform: scale3d(1, 1, 1);
   -webkit-transition: none;
   transition: none;
-  -webkit-animation: expand 0.8s 0.6s ease-out forwards;
-  animation: expand 0.8s 0.6s ease-out forwards;
-  opacity: 0;
 }
 .form_wrapper h2 {
   font-size: 1.5em;
@@ -241,8 +253,7 @@ body {
 }
 
 .input_field {
-  margin-top: 3.5%;
-  margin-bottom: 3.5%;
+  margin-top: 3.9%
 }
 
 .form_wrapper .input_field > span > i {
@@ -274,7 +285,7 @@ body {
   background: #fafafa;
 }
 .form_wrapper input[type="submit"] {
-  background: #f5ba1a;
+  background: #01BCE7;
   height: 35px;
   line-height: 35px;
   width: 100%;
