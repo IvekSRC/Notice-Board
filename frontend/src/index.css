@@ -158,7 +158,7 @@ li.dropdown {
 
 /* Register form */
 
-.registerCompanyPage {
+.registerImage {
   height: 100vh;
   background-image: url('../public/images/registrationBackground.jpg');
   background-repeat: no-repeat;
@@ -586,4 +586,33 @@ body {
 
 .registerCompanyForm {
   height: 100%;
+}
+
+.registerHeader {
+  color: #b2c0cb
+}
+
+.registerCompanyButton {
+  background: #01BCE7;
+  height: 35px;
+  line-height: 35px;
+  width: 100%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.registerCompanyButton:hover {
+  background: #e1a70a;
+}
+
+.registerCompanyButton:focus {
+  background: #e1a70a;
 }

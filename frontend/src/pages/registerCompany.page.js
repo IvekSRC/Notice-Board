@@ -3,7 +3,7 @@ import RegisterFormCompany from "../components/registerFormCompany.component";
 
 const RegisterCompany = () => {
   return (
-    <div className="registerCompanyPage">
+    <div className="registerImage">
       <NavigationBar/>      
       <RegisterFormCompany/>
     </div>

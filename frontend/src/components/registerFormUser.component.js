@@ -4,90 +4,90 @@ import isMatchedPassowrd from '../validators/isMatchedPassword.validator';
 import validateRequiredField from '../validators/validateRequiredField.validator';
 
 const RegisterForm = () => {
-  const registerCompany = async () => {
-      // Collect require data
-      const firstName = document.getElementById('registerFirstName');
-      const lastName = document.getElementById('registerLastName');
-      const companyName = document.getElementById('registerCompanyName');
-      const email = document.getElementById('registerCompanyEmail');
-      const password = document.getElementById('registerCompanyPassword');
-      const repeatPassowrd = document.getElementById('registerCompanyRepeatPassword');
-
-      // Validation - Required Data
-      var isValid = true;
-      if(validateRequiredField(firstName) == false) {
-        isValid = false;
-      }
-      if(validateRequiredField(lastName) == false) {
-        isValid = false;
-      }
-      if(validateRequiredField(companyName) == false) {
-        isValid = false;
-      }
-      if(validateRequiredField(email) == false) {
-        isValid = false;
-      }
-      if(validateRequiredField(password) == false) {
-        isValid = false;
-      }
-      if(validateRequiredField(repeatPassowrd) == false) {
-        isValid = false;
-      }
-
-      var termsChecked = document.getElementById('cb1');
-      var termsLabel = document.getElementById('termsLabel');
-      if(termsChecked.checked == false) {
-        termsLabel.style.color = "red";
-        isValid = false;
-      } else {
-        termsLabel.style.color = "black";
-      }
-      
-      if(isValid == false) {
-        return;
-      }
-
-      // Validation - Match Passowrd
-      if(!isMatchedPassowrd(password, repeatPassowrd)) {
-        return;
-      }
-
-      var gender = undefined;
-      if(document.getElementById('registerGenderMale').checked) {
-        gender = document.getElementById('registerGenderMale').value;
-      } else if (document.getElementById('registerGenderFemale').checked) {
-        gender = document.getElementById('registerGenderFemale').value;
-      }
-      
-      var country = document.getElementById('country').value;
-      if(country == 'Select country') {
-        country = undefined;
-      }
-
-      const newCompany = {
-        email: email.value,
-        password: password.value,
-        name: companyName.value,
-        firstName: firstName.value,
-        lastName: lastName.value,
-        gender: gender,
-        country: country
-      }
-      
-      const response =  await (await fetchData('companys/register', 'POST', newCompany)).json();
-      console.log(response);
-      window.location.replace('/');
-  }
+    const registerUser = async () => {
+        // Collect require data
+        const firstName = document.getElementById('registerFirstName');
+        const lastName = document.getElementById('registerLastName');
+        const nickName = document.getElementById('registerNickName');
+        const email = document.getElementById('registerUserEmail');
+        const password = document.getElementById('registerUserPassword');
+        const repeatPassowrd = document.getElementById('registerUserRepeatPassword');
+    
+        // Validation - Required Data
+        var isValid = true;
+        if(validateRequiredField(firstName) == false) {
+          isValid = false;
+        }
+        if(validateRequiredField(lastName) == false) {
+          isValid = false;
+        }
+        if(validateRequiredField(nickName) == false) {
+          isValid = false;
+        }
+        if(validateRequiredField(email) == false) {
+          isValid = false;
+        }
+        if(validateRequiredField(password) == false) {
+          isValid = false;
+        }
+        if(validateRequiredField(repeatPassowrd) == false) {
+          isValid = false;
+        }
+    
+        var termsChecked = document.getElementById('cb1');
+        var termsLabel = document.getElementById('termsLabel');
+        if(termsChecked.checked == false) {
+          termsLabel.style.color = "red";
+          isValid = false;
+        } else {
+          termsLabel.style.color = "black";
+        }
+    
+        if(isValid == false) {
+          return;
+        }
+    
+        // Validation - Match Passowrd
+        if(!isMatchedPassowrd(password, repeatPassowrd)) {
+          return;
+        }
+    
+        var gender = undefined;
+        if(document.getElementById('registerGenderMale').checked) {
+          gender = document.getElementById('registerGenderMale').value;
+        } else if (document.getElementById('registerGenderFemale').checked) {
+          gender = document.getElementById('registerGenderFemale').value;
+        }
+        
+        var country = document.getElementById('country').value;
+        if(country == 'Select country') {
+          country = undefined;
+        }
+    
+        const newUser = {
+          email: email.value,
+          password: password.value,
+          nickName: nickName.value,
+          firstName: firstName.value,
+          lastName: lastName.value,
+          gender: gender,
+          country: country
+        }
+    
+        const response = await (await fetchData('users/register', 'POST', newUser)).json();
+        console.log(response);
+        window.location.replace('/');
+    }
 
   return (
     <div className="form_wrapper">
       <div className="form_container">
         <div className="title_container">
-          <h2 className='registerHeader'>Register Company</h2>
+          <h2 className='registerHeader'>Register User</h2>
         </div>
         <div className="row clearfixx">
-          <div className='registerCompanyForm'>
-            <form className='registerCompanyForm'>
+          <div className='registerUserForm'>
+            <form className='registerUserForm'>
               <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><FaUser className='registrationIcon'/></i></span>
                 <input type="text" name="firstName" placeholder="First Name" required id='registerFirstName' minLength={2}/>
               </div>
@@ -95,16 +95,16 @@ const RegisterForm = () => {
                 <input type="text" name="lastName" placeholder="Last Name" required id='registerLastName' minLength={2}/>
               </div>
               <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><FaUser className='registrationIcon'/></i></span>
-                <input type="text" name="companyName" placeholder="Company name" required id='registerCompanyName' minLength={3}/>
+                <input type="text" name="nickName" placeholder="Nick name" required id='registerNickName' minLength={3}/>
               </div>
               <div className="input_field"> <span><i aria-hidden="false" className="fa fa-envelope"><FaEnvelope className='registrationIcon'/></i></span>
-                <input type="email" name="email" placeholder="Email" required id='registerCompanyEmail' />
+                <input type="email" name="email" placeholder="Email" required id='registerUserEmail' />
               </div>
               <div className="input_field"> <span><i aria-hidden="true" className="fa fa-lock"><FaLock className='registrationIcon'/></i></span>
-                <input type="password" name="password" placeholder="Password" required id='registerCompanyPassword' minLength={7}/>
+                <input type="password" name="password" placeholder="Password" required id='registerUserPassword' minLength={7}/>
               </div>
               <div className="input_field"> <span><i aria-hidden="true" className="fa fa-lock"><FaLock className='registrationIcon'/></i></span>
-                <input type="password" name="password" placeholder="Re-type Password" required id='registerCompanyRepeatPassword' minLength={7}/>
+                <input type="password" name="password" placeholder="Re-type Password" required id='registerUserRepeatPassword' minLength={7}/>
               </div>
               <div className="input_field radio_option">
                 <input type="radio" name="radiogroup1" id="registerGenderMale" value='Male'/>
@@ -377,7 +377,7 @@ const RegisterForm = () => {
                   <input type="checkbox" id="cb2"/>
               <label htmlFor="cb2">I want to receive the newsletter</label>
                 </div>
-              <input className="button registerCompanyButton" type="button" value="Register" onClick={registerCompany}/>
+              <input className="button registerCompanyButton" type="button" value="Register" onClick={registerUser}/>
             </form>
           </div>
         </div>

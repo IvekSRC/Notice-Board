@@ -25,6 +25,22 @@ const userSchema = new mongoose.Schema({
         require: true,
         trim: true
     },
+    firstName: {
+        type: String,
+        minlength: 2,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        minlength: 2,
+        required: true,
+    },
+    gender: {
+        type: String,
+    },
+    country: {
+        type: String,
+    },
     profilePicture: {
         type: String
     },
