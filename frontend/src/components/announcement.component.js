@@ -1,4 +1,4 @@
-import { fetchData } from "../fetchData/fetchFunction";
+import { fetchData } from "../services/fetch.service";
 import { useState, useEffect } from "react";
 
 const Announcement = (announcement) => {

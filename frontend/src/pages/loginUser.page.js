@@ -3,10 +3,9 @@ import NavigationBar from "../components/navigationBar.component";
 const LoginUser = () => {
   return (
     <>
-      <div>
+      <div className="loginImage">
         <NavigationBar />
       </div>
-      <p>Login user</p>
     </>
   )
 }

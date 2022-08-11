@@ -1,6 +1,6 @@
 import React from "react";
 import NavigationBar from "../components/navigationBar.component";
-import { fetchData } from "../fetchData/fetchFunction";
+import { fetchData } from "../services/fetch.service";
 import { useState, useEffect } from "react";
 import Announcement from "../components/announcement.component";
 
@@ -20,6 +20,8 @@ const Home = () => {
     <>
         <div>
             <NavigationBar />
+
+            <p>{localStorage.getItem('token')}</p>
 
             <div className="announcements">
                 {announcements.map((announcement) => (

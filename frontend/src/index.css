@@ -616,3 +616,12 @@ body {
 .registerCompanyButton:focus {
   background: #e1a70a;
 }
+
+/* Login Form */
+
+.loginImage {
+  height: 100vh;
+  background-image: url('../public/images/loginBackground.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}

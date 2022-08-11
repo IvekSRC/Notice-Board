@@ -1,5 +1,5 @@
 import { FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
-import { fetchData } from '../fetchData/fetchFunction';
+import { fetchData } from '../services/fetch.service';
 import isMatchedPassowrd from '../validators/isMatchedPassword.validator';
 import validateRequiredField from '../validators/validateRequiredField.validator';
 
@@ -75,7 +75,15 @@ const RegisterForm = () => {
       }
       
       const response =  await (await fetchData('companys/register', 'POST', newCompany)).json();
-      console.log(response);
+      
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('email', response.user.email);
+      localStorage.setItem('firstName', response.user.firstName);
+      localStorage.setItem('lastName', response.user.lastName);
+      localStorage.setItem('companyName', response.user.name);
+      localStorage.setItem('gender', response.user.gender);
+      localStorage.setItem('country', response.user.country);
+
       window.location.replace('/');
   }
 
