@@ -625,3 +625,97 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+.app {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  font-family: Georgia, Times, "Times New Roman", serif;
+  width: 25%;
+  margin-left: 20%;
+  margin-top: 10%;
+}
+
+.loginInputName, .loginInputPassword {
+  height: 25px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.loginSubmitButton {
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  background: #01d28e;
+  border: 1px solid #01d28e;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+.loginSubmitButton:hover {
+  background: #6cf0c2;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.login-form {
+  background-color: rgb(133, 222, 133);
+  padding: 2rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.loginError {
+  color: red;
+  font-size: 12px;
+}
+
+.loginTitle {
+  font-size: 35px;
+  text-align: center;
+  margin: 1% 0% 10% 0%;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px;
+}
+
+.logInViaLabel {
+  font-size: large;
+  margin-right: 10%;
+}
+
+.logInViaDiv {
+  display: flex;
+  flex-direction: row;
+  margin: 3% 3% 6% 3%;
+}
+
+.logInViaLabel {
+  color: #0e181b;
+  margin-right: 3%;
+}
+
+.logInViaUser {
+  font-size: medium;
+  color: white;
+  margin-top: 0.5%;
+}
+
+.logInViaCompany {
+  margin-top: 0.5%;
+}
+
+.loginViaSwitch {
+  position: relative;
+  bottom: 7px;
+}
+
+.logInEmailAndPasswordLabel {
+  margin-top: 3%;
+  margin-bottom: 3%;
+}

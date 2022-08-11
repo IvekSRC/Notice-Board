@@ -1,5 +1,5 @@
 import { AiFillHome } from 'react-icons/ai';
-import { BiLogInCircle, BiLogOutCircle, BiRegistered } from 'react-icons/bi';
+import { BiLogIn, BiLogInCircle, BiLogOutCircle, BiRegistered } from 'react-icons/bi';
 import { isLogged, logOut } from '../services/auth.services';
 
 const NavigationBar = () => {
@@ -33,14 +33,10 @@ const NavigationBar = () => {
               </div>
             </li>
             <li className="dropdown">
-              <a className="dropbtn">
+              <a href="/login">
                 Login
-                <BiLogInCircle className='navBarIcon'/>
+                <BiLogIn className='navBarIcon'/>
               </a>
-              <div className="dropdown-content">
-                <a href="/loginCompany">Company</a>
-                <a href="/loginUser">User</a>
-              </div>
             </li>
           </>
         }

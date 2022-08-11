@@ -32,7 +32,7 @@ const findByCredentials = async (email, password, model) => {
   }
 
   if (!element) {
-    throw new Error("Can't found user with that email.");
+    throw new Error("Email is incorrect.");
   }
   const isMatch = await bcrypt.compare(password, element.password);
 

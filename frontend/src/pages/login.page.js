@@ -1,13 +1,15 @@
+import LoginForm from "../components/loginForm.component";
 import NavigationBar from "../components/navigationBar.component";
 
-const LoginUser = () => {
+const Login = () => {
   return (
     <>
       <div className="loginImage">
-        <NavigationBar />
+        <NavigationBar/>
+        <LoginForm/>
       </div>
     </>
   )
 }
 
-export default LoginUser;
+export default Login;

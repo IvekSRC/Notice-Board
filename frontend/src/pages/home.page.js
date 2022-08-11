@@ -22,7 +22,7 @@ const Home = () => {
             <NavigationBar />
 
             <p>{localStorage.getItem('token')}</p>
-
+            <p>{console.log(announcements)}</p>
             <div className="announcements">
                 {announcements.map((announcement) => (
                     <div className="announcement" key={announcement._id}>
