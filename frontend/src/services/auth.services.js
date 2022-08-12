@@ -11,7 +11,17 @@ const logOut = () => {
     localStorage.setItem('token', '');
 }
 
+const loggedEntity = () => {
+    if(localStorage.getItem('loggedEntity') == 'user') {
+        return 'user';
+    } 
+    else if(localStorage.getItem('loggedEntity') == 'company') {
+        return 'company';
+    }
+}
+
 module.exports = {
     isLogged,
-    logOut
+    logOut,
+    loggedEntity
 };

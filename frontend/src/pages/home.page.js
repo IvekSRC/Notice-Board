@@ -3,33 +3,121 @@ import NavigationBar from "../components/navigationBar.component";
 import { fetchData } from "../services/fetch.service";
 import { useState, useEffect } from "react";
 import Announcement from "../components/announcement.component";
+import { isLogged, loggedEntity } from "../services/auth.services";
+import TablePagination from '@mui/material/TablePagination';
+import CreateAnnouncementForm from "../components/createAnnouncementForm.component";
 
 const Home = () => {
     const [announcements, setAnnouncements] = useState([]);
+    const [myAnnouncements, setMyAnnouncements] = useState([]);
+
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [numberOfAnnouncements, setNumberOfAnnouncements] = React.useState(0);
+
+    const [isExpanded, setIsExpanded] = React.useState(true);
 
     useEffect(() => {
         const getApiData = async () => {
-            const response = await (await fetchData('announcements')).json();
-            setAnnouncements(response.Items);
+            const fetchAnnouncements = await (await fetchData(`announcements?limit=${rowsPerPage}&skip=${page * rowsPerPage}`)).json();
+            setAnnouncements(fetchAnnouncements.Items);
+            setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
+
+            if(isLogged() == true) {
+                if(loggedEntity() == 'company') {
+                    const token = localStorage.getItem('token');
+                    const fetchMyAnnouncements = await (await fetchData(`announcementsme?limit=${rowsPerPage}&skip=${page * rowsPerPage}`, 'GET', undefined, token)).json();
+                    setMyAnnouncements(fetchMyAnnouncements.Items);
+                    setNumberOfAnnouncements(fetchMyAnnouncements.TotalPages);
+                }
+            }
         }
 
         getApiData();
-    }, []);
+    }, [rowsPerPage, page]);
+
+    const renderAnnouncements = (listOfAnnouncements) => {
+        return (
+            <>
+                {listOfAnnouncements.map((announcement) => (
+                    <div className="announcement" key={announcement._id}>
+                        <Announcement announcement={announcement}/>
+                    </div>
+                ))}
+            </>
+        )
+    }
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+    
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const changeStateOfButton = () => {
+        const changeStage = !isExpanded;
+        setIsExpanded(changeStage);
+    }
+
+    const renderCompanyAnnouncements = (listOfAnnouncements) => {
+        return (
+            <>
+                <div className="createNewAnnouncement">
+                    <button 
+                        className="createNewAnnouncementBtn"
+                        style={ { backgroundColor: isExpanded ? 'green' : 'red' } }
+                        onClick={() => changeStateOfButton()}
+                    >
+                        { isExpanded ? 'Create new Announcement' : 'Collapse' }
+                    </button>
+                </div>
+                <div>
+                    { 
+                        isExpanded ?
+                        <></>
+                        :
+                        <>
+                            <CreateAnnouncementForm/>
+                        </>
+                    }
+                </div>
+                <div className="announcements">
+                    {renderAnnouncements(listOfAnnouncements)}
+                </div>
+            </>
+        )
+    }
 
     return (
     <>
         <div>
             <NavigationBar />
 
-            <p>{localStorage.getItem('token')}</p>
-            <p>{console.log(announcements)}</p>
-            <div className="announcements">
-                {announcements.map((announcement) => (
-                    <div className="announcement" key={announcement._id}>
-                        <Announcement announcement={announcement}/>
-                    </div>
-                ))}
-            </div>
+            {
+                isLogged() == true ? 
+                <>
+                    {
+                        loggedEntity() == 'user' ?
+                        renderAnnouncements(announcements)
+                        :
+                        renderCompanyAnnouncements(myAnnouncements)
+                    }
+                </>
+                :
+                renderAnnouncements(announcements)
+            }
+
+            <TablePagination
+                component="div"
+                count={numberOfAnnouncements * rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </div>
     </>
     )

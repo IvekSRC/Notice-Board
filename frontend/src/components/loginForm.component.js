@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { fetchData } from '../services/fetch.service';
 import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-
 
 const LoginForm = () => {
     // React States
@@ -31,6 +29,11 @@ const LoginForm = () => {
 
         if(response.token != null) {
             localStorage.setItem('token', response.token);
+            if(loginVia) {
+                localStorage.setItem('loggedEntity', 'company');
+            } else {
+                localStorage.setItem('loggedEntity', 'user');
+            }
             setIsSubmitted(true);
         } else {
             if(response[0] == 'P') {

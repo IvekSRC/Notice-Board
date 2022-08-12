@@ -15,7 +15,7 @@ const createAnnouncement = async (body, id) => {
       category: body.category,
       startTime: Date.now(),
       endTime: body.endTime || defaultEndTime,
-      status: true,
+      private: body.private,
       companyId: id,
     };
     const announcement = new Announcement(newAnnouncement);

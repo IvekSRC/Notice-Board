@@ -86,7 +86,7 @@ router.get('/announcements/:id', async (req, res) => {
 });
 
 // Get My Announcement
-router.get('/announcements/me', authForCompany, async (req, res) => {
+router.get('/announcementsme', authForCompany, async (req, res) => {
     const { company: { id: companyId } } = req;
 
     try {

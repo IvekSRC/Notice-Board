@@ -7,8 +7,8 @@ dotenv.config({
 
 module.exports = {
   NODE_ENV: process.env.NODE_ENV || 'defaultEnv',
-  PORT: process.env.PORT || 3001,
+  PORT: process.env.PORT || 8080,
   MONGODB_URL: process.env.MONGODB_URL || 'mongodb://localhost:27017/noticeBoardDatabase',
   JWT_SECRET: process.env.JWT_SECRET || 'kjH8MN7JHhjJ5',
-  API_URL: process.env.API_URL || 'http://localhost:3001'
+  API_URL: process.env.API_URL || 'http://localhost:8080'
 };

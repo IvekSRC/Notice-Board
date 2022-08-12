@@ -125,6 +125,7 @@ li.dropdown {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  margin-top: 2%;
 }
 
 .announcement {
@@ -718,4 +719,151 @@ body {
 .logInEmailAndPasswordLabel {
   margin-top: 3%;
   margin-bottom: 3%;
+}
+
+/* Home Page - Company part */
+
+.createNewAnnouncement {
+  margin: 2% 0% 0% 35%;
+}
+
+.createNewAnnouncementBtn {
+  width: 30%;
+  height: 50px;
+}
+
+.createAnnouncementForm {
+  background: bottom;
+  width: 50%;
+  height: 90%;
+  box-sizing: border-box;
+  padding: 25px;
+  margin: 2% auto 0;
+  position: relative;
+  z-index: 1;
+  border: 5px solid #01BCE7;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  -webkit-transform-origin: 50% 0%;
+  transform-origin: 50% 0%;
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  -webkit-transition: none;
+  transition: none;
+}
+.createAnnouncementForm h2 {
+  font-size: 1.5em;
+  line-height: 1.5em;
+  margin: 0;
+}
+.createAnnouncementForm .title_container {
+  text-align: center;
+  padding-bottom: 15px;
+}
+
+.createAnnouncementForm h3 {
+  font-size: 1.1em;
+  font-weight: normal;
+  line-height: 1.5em;
+  margin: 0;
+}
+.createAnnouncementForm label {
+  font-size: 12px;
+}
+.createAnnouncementForm .row {
+  margin: 1px -15px;
+}
+.createAnnouncementForm .row > div {
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+.createAnnouncementForm .col_half {
+  width: 50%;
+  float: left;
+}
+.createAnnouncementForm .input_field {
+  position: relative;
+  margin-bottom: 20px;
+  -webkit-animation: bounce 0.6s ease-out;
+  animation: bounce 0.6s ease-out;
+}
+.createAnnouncementForm .input_field > span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #333;
+  height: 100%;
+  border-right: 1px solid #cccccc;
+  text-align: center;
+  width: 30px;
+}
+
+.input_field {
+  margin-top: 3.9%
+}
+
+.createAnnouncementForm .input_field > span > i {
+  padding-top: 10px;
+}
+.createAnnouncementForm .textarea_field > span > i {
+  padding-top: 10px;
+}
+.createAnnouncementForm input[type="text"], .createAnnouncementForm input[type="email"], .createAnnouncementForm input[type="password"], .createAnnouncementForm input[type='date'] {
+  width: 100%;
+  padding: 8px 10px 9px 35px;
+  height: 35px;
+  border: 1px solid #cccccc;
+  box-sizing: border-box;
+  outline: none;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.createAnnouncementForm input[type="text"]:hover, .createAnnouncementForm input[type="email"]:hover, .createAnnouncementForm input[type="password"]:hover, .createAnnouncementForm input[type='date']:hover {
+  background: #fafafa;
+}
+.createAnnouncementForm input[type="text"]:focus, .createAnnouncementForm input[type="email"]:focus, .createAnnouncementForm input[type="password"]:focus, .createAnnouncementForm input[type='date']:focus {
+  -webkit-box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
+  -moz-box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
+  box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
+  border: 1px solid #f5ba1a;
+  background: #fafafa;
+}
+.createAnnouncementForm input[type="submit"] {
+  background: #01BCE7;
+  height: 35px;
+  line-height: 35px;
+  width: 100%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.createAnnouncementForm input[type="submit"]:hover {
+  background: #e1a70a;
+}
+.createAnnouncementForm input[type="submit"]:focus {
+  background: #e1a70a;
+}
+.createAnnouncementForm input[type="checkbox"], .createAnnouncementForm input[type="radio"] {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.form_container .row .col_half.last {
+  border-left: 1px solid #cccccc;
 }

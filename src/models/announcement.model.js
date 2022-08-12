@@ -29,12 +29,13 @@ const announcementSchema = new mongoose.Schema({
     },
     status: {
         type: Boolean,
-        require: true
+        require: true,
+        default: true
     },
     private: {
         type: Boolean,
         require: true,
-        default: false
+        default: true
     },
     picture: {
         type: String
