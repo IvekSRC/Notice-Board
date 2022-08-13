@@ -22,10 +22,11 @@ const announcementSchema = new mongoose.Schema({
     },
     startTime: {
         type: Date,
-        required: true,
+        require: true,
     },
     endTime: {
         type: Date,
+        require: true,
     },
     status: {
         type: Boolean,

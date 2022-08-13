@@ -8,7 +8,7 @@ const LoginForm = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleSubmit = async (event) => {
-        //Prevent page reload
+        // Prevent page reload
         event.preventDefault();
 
         var { email, pass } = document.forms[0];
@@ -48,7 +48,7 @@ const LoginForm = () => {
     const redirectToHomePage = () => {
         setTimeout(() => {
             window.location.replace('/');
-        }, 3000)
+        }, 2000)
     }
 
     const changeLogInVia = () => {
@@ -72,7 +72,7 @@ const LoginForm = () => {
     const renderForm = (
         <form onSubmit={handleSubmit} className="logInForm">
             <div className="logInViaDiv">
-                <label className="logInViaLabel">You are: </label>
+                <label className="logInViaLabel">You are</label>
                 <label className="logInViaUser" id="logInViaUser">User</label>                
                 <Switch color="primary" id="loginVia" className="loginViaSwitch" onChange={changeLogInVia}/>
                 <label className="logInViaCompany" id="logInViaCompany">Company</label>
@@ -102,10 +102,13 @@ const LoginForm = () => {
             {
                 isSubmitted ? 
                 <div>
-                    Successfully logged In
-                    {
-                        redirectToHomePage()
-                    }
+                    <div className="succesfullyLoggedIn">Successfully logged In</div>
+                    <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+                    <div>
+                        {
+                            redirectToHomePage()
+                        }
+                    </div>
                 </div> 
                 : 
                 renderForm

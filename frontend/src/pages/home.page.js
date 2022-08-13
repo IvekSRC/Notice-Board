@@ -38,13 +38,13 @@ const Home = () => {
 
     const renderAnnouncements = (listOfAnnouncements) => {
         return (
-            <>
+            <div className="announcements">
                 {listOfAnnouncements.map((announcement) => (
                     <div className="announcement" key={announcement._id}>
                         <Announcement announcement={announcement}/>
                     </div>
                 ))}
-            </>
+            </div>
         )
     }
 
@@ -67,8 +67,7 @@ const Home = () => {
             <>
                 <div className="createNewAnnouncement">
                     <button 
-                        className="createNewAnnouncementBtn"
-                        style={ { backgroundColor: isExpanded ? 'green' : 'red' } }
+                        className={ isExpanded ? 'button-29 expanded' : 'button-29 collapsed' }
                         onClick={() => changeStateOfButton()}
                     >
                         { isExpanded ? 'Create new Announcement' : 'Collapse' }
@@ -93,7 +92,7 @@ const Home = () => {
 
     return (
     <>
-        <div>
+        <div className="homeBackground">
             <NavigationBar />
 
             {

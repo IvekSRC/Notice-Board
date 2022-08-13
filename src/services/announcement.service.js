@@ -1,5 +1,4 @@
 const { Announcement } = require('../models');
-const fs = require('fs');
 const expiresAnnouncement = require('./cron.service');
 const { announcementUpdateSchema } = require('../validators');
 const { PICTURE } = require('../constants/folderNames.constants');

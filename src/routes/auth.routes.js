@@ -32,7 +32,7 @@ router.post('/companys/login', async (req, res) => {
         token,
       });
     } catch (error) {
-      res.status(400).json('Failed Login : ' + error.message);
+      res.status(400).json(error.message);
     }
 });
 
