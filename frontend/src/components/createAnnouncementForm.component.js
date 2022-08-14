@@ -1,7 +1,7 @@
 import { MdDriveFileRenameOutline, MdOutlineCategory, MdOutlineDescription } from 'react-icons/md'
 import { BiTimeFive } from 'react-icons/bi';
-import { fetchData } from '../services/fetch.service';
-import isMatchedPassowrd from '../validators/isMatchedPassword.validator';
+import { AiOutlineFileImage } from 'react-icons/ai'
+import { fetchData, fetchData2 } from '../services/fetch.service';
 import validateRequiredField from '../validators/validateRequiredField.validator';
 
 const CreateAnnouncementForm = () => {
@@ -10,6 +10,7 @@ const CreateAnnouncementForm = () => {
         const name = document.getElementById('createName');
         const category = document.getElementById('createCategory');
         const endTime = document.getElementById('createEndTime');
+        const image = document.querySelector('#createImage');
 
         // Validation - Required Data
         var isValid = true;
@@ -20,6 +21,9 @@ const CreateAnnouncementForm = () => {
           isValid = false;
         }
         if(validateRequiredField(endTime) == false) {
+          isValid = false;
+        }
+        if(validateRequiredField(image) == false) {
           isValid = false;
         }
 
@@ -54,7 +58,19 @@ const CreateAnnouncementForm = () => {
         }
         
         const token = localStorage.getItem('token');
-        const response =  await (await fetchData('announcements', 'POST', newAnnouncement, token)).json();
+        const response = await (await fetchData('announcements', 'POST', newAnnouncement, token)).json();
+        
+        // Fetch method for upload picture
+        const formData = new FormData();
+        formData.append('picture', image.files[0]);
+        const options = {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': `Bearer ${token}` 
+          }
+        }
+        await fetch(`http://localhost:8080/announcements/${response._id}/picture`, options);
         
         window.location.replace('/');
     }
@@ -79,6 +95,9 @@ const CreateAnnouncementForm = () => {
                 </div>
                 <div className="input_field"> <span><i aria-hidden="false" className="fa fa-envelope"><BiTimeFive className='registrationIcon'/></i></span>
                   <input type="date" name="endTime" required id='createEndTime' />
+                </div>
+                <div className="input_field createAnnouncementFileInput"> <span><i aria-hidden="false" className="fa fa-envelope"><AiOutlineFileImage className='registrationIcon'/></i></span>
+                  <input type="file" name="image" required id='createImage'/>
                 </div>
                 <div className="input_field radio_option">
                   <input type="radio" name="radiogroup1" id="createPrivateStatus" value='Private'/>

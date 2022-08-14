@@ -38,13 +38,13 @@ const Announcement = (announcement) => {
             <p className="displayProp">
                 Start Time: 
                 <span className="displayPropValue">
-                    {` ${announcement.announcement.startTime}`}
+                    {` ${new Date(announcement.announcement.startTime).toDateString()}`}
                 </span>
             </p>
             <p className="displayProp">
                 End Time: 
                 <span className="displayPropValue">
-                    {` ${announcement.announcement.endTime}`}
+                    {` ${new Date(announcement.announcement.endTime).toDateString()}`}
                 </span>
             </p>
         </>
