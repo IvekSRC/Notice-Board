@@ -4,11 +4,11 @@ const { PROFILE_PICTURE } = require('../constants/folderNames.constants');
 const deleteFile = require('./picture.service');
 
 const getUsers =  async () => {
-    return User.find({});
+    return await User.find({});
 }
 
 const getUser = async (id) => {
-    return User.findById(id);
+    return await User.findById(id);
 }
 
 const updateUser = async (id, validatedBody) => {

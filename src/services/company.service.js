@@ -1,15 +1,14 @@
 const { Company } = require('../models');
 const { companyUpdateSchema } = require('../validators/index');
-const fs = require('fs');
 const deleteFile = require('./picture.service');
 const { LOGO } = require('../constants/folderNames.constants');
 
 const getCompanys =  async () => {
-    return Company.find({});
+    return await Company.find({});
 }
 
 const getCompany = async (id) => {
-    return Company.findById(id);
+    return await Company.findById(id);
 }
 
 const updateCompany = async (id, validatedBody) => {

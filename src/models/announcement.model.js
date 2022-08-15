@@ -38,6 +38,9 @@ const announcementSchema = new mongoose.Schema({
         require: true,
         default: true
     },
+    tags: [{
+        type: String
+    }],
     picture: {
         type: String
     },

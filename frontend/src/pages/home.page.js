@@ -6,10 +6,13 @@ import Announcement from "../components/announcement.component";
 import { isLogged, loggedEntity } from "../services/auth.services";
 import TablePagination from '@mui/material/TablePagination';
 import CreateAnnouncementForm from "../components/createAnnouncementForm.component";
+import { Autocomplete, TextField } from "@mui/material";
 
 const Home = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [myAnnouncements, setMyAnnouncements] = useState([]);
+
+    const [tags, setTags] = useState([]);
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -17,35 +20,121 @@ const Home = () => {
 
     const [isExpanded, setIsExpanded] = React.useState(true);
 
+    const [sortBy, setSortBy] = React.useState('_id');
+    const [sortOrder, setSortOrder] = React.useState(1);
+
     useEffect(() => {
         const getApiData = async () => {
-            const fetchAnnouncements = await (await fetchData(`announcements?limit=${rowsPerPage}&skip=${page * rowsPerPage}`)).json();
+            const sortCriterium = `?limit=${rowsPerPage}&skip=${page * rowsPerPage}&sortProps[0]=${sortBy}&sortOrder[0]=${sortOrder}`;
+
+            var fetchAnnouncements = await (await fetchData(`announcements${sortCriterium}`)).json();
             setAnnouncements(fetchAnnouncements.Items);
             setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
 
             if(isLogged() == true) {
                 if(loggedEntity() == 'company') {
                     const token = localStorage.getItem('token');
-                    const fetchMyAnnouncements = await (await fetchData(`announcementsme?limit=${rowsPerPage}&skip=${page * rowsPerPage}`, 'GET', undefined, token)).json();
-                    setMyAnnouncements(fetchMyAnnouncements.Items);
-                    setNumberOfAnnouncements(fetchMyAnnouncements.TotalPages);
+                    fetchAnnouncements = await (await fetchData(`announcementsme${sortCriterium}`, 'GET', undefined, token)).json();
+                    setMyAnnouncements(fetchAnnouncements.Items);
+                    setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
                 }
             }
+
+            const fetchTags = await (await fetchData('announcementstags')).json();
+            setTags(fetchTags);
         }
 
         getApiData();
-    }, [rowsPerPage, page]);
+    }, [rowsPerPage, page, sortBy, sortOrder]);
 
     const renderAnnouncements = (listOfAnnouncements) => {
         return (
-            <div className="announcements">
-                {listOfAnnouncements.map((announcement) => (
-                    <div className="announcement" key={announcement._id}>
-                        <Announcement announcement={announcement}/>
-                    </div>
-                ))}
+            <div>
+                <div className="sortingPart">
+                    { renderFilterPart() }
+                </div>
+                <div className="announcements">
+                    {listOfAnnouncements.map((announcement) => (
+                        <div className="announcement" key={announcement._id}>
+                            <Announcement announcement={announcement}/>
+                        </div>
+                    ))}
+                </div>
             </div>
         )
+    }
+
+    const renderFilterPart = () => {
+        return (
+            <>
+                <Autocomplete
+                    disablePortal
+                    className="sortBy"
+                    options={[
+                        "Name",
+                        "Status",
+                        "End Time"
+                    ]}
+                    sx={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="Sort By" />}
+                    onChange={(event, value) => changeSortByCriterium(value)}
+                />
+                <Autocomplete
+                    disablePortal
+                    className="sortOrder"
+                    options={[
+                        "Ascending",
+                        "Descending",
+                    ]}
+                    sx={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="Sort Order" />}
+                    onChange={(event, value) => changeSortByOrder(value)}
+                />
+                <Autocomplete
+                    multiple
+                    className="sortByTags"
+                    options={tags}
+                    getOptionLabel={(option) => option.title}
+                    sx={{ width: 300 }}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            variant="standard"
+                            label="Tags"
+                        />
+                    )}
+                    onChange={(event, value) => searchByTag(value)}
+                />
+            </>
+        )
+    }
+
+    const searchByTag = (values) => {
+        var selectedTags = [];
+        values.forEach(tagObject => {
+            selectedTags.push(tagObject.title);
+        });
+        setTags(selectedTags);
+    }
+
+    const changeSortByCriterium = (value) => {
+        setSortBy(toCamelCase(value));
+    }
+
+    const changeSortByOrder = (value) => {
+        if(value == 'Ascending') {
+            setSortOrder(1);
+        }
+        else if(value == 'Descending') {
+            setSortOrder(-1);
+        }
+    }
+
+    const toCamelCase = (string) => {
+        return string 
+            .replace(/\s(.)/g, function($1) { return $1.toUpperCase(); })
+            .replace(/\s/g, '')
+            .replace(/^(.)/, function($1) { return $1.toLowerCase(); });
     }
 
     const handleChangePage = (event, newPage) => {

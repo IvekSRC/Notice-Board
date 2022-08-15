@@ -985,3 +985,16 @@ body {
 .createAnnouncementFileInput {
   background-color: white;
 }
+
+.sortingPart {
+  border: 1px solid black;
+  border-radius: 10px;
+  margin: 2%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.sortBy, .sortOrder, .sortByTags {
+  margin: 1%;
+}

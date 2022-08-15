@@ -6,7 +6,7 @@ const deleteFile = require('./picture.service');
 
 const createAnnouncement = async (body, id) => {
     // The default end time will be one minute after the auction is created
-    const defaultEndTime = new Date(Date.now() + 60000);
+    const defaultEndTime = new Date(Date.now() + 1231241230000);
   
     let newAnnouncement = {
       name: body.name,
@@ -16,6 +16,7 @@ const createAnnouncement = async (body, id) => {
       endTime: body.endTime || defaultEndTime,
       private: body.private,
       companyId: id,
+      tags: body.tags
     };
     const announcement = new Announcement(newAnnouncement);
     expiresAnnouncement(announcement._id, announcement.endTime);
@@ -47,11 +48,11 @@ const updateAnnouncement = async (idCompany, validatedBody, idAnnouncement) => {
 }
 
 const getAnnouncement =  async (announcementId) => {
-    return Announcement.findById({ _id: announcementId });
+    return await Announcement.findById({ _id: announcementId });
 }
 
 const getMyAnnouncement = async (idOfCompany) => {
-    return Announcement.find({ companyId: idOfCompany });
+    return await Announcement.find({ companyId: idOfCompany });
 }
 
 const deleteAnnouncement = async (companyId, announcementId) => {
@@ -122,6 +123,19 @@ const deletePicture = async (announcementId, companyId) => {
   await announcement.save();
 }
 
+const getTags = async () => {
+  const announcements = await Announcement.find();
+  const listOfTags = [];
+  announcements.forEach(announcement => {
+    announcement.tags.forEach(tag => {
+      if(!listOfTags.includes(tag)) {
+        listOfTags.push(tag);
+      }
+    });
+  });
+  return listOfTags;
+}
+
 module.exports = {
     createAnnouncement,
     updateAnnouncement,
@@ -130,5 +144,6 @@ module.exports = {
     deleteAnnouncement,
     addPicture,
     deletePicture,
-    getPicture
+    getPicture,
+    getTags
 };

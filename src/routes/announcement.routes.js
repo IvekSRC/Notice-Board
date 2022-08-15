@@ -6,12 +6,12 @@ const upload = require('../middlewares/upload.middleware');
 const {
     createAnnouncement,
     updateAnnouncement,
-    getMyAnnouncement,
     deleteAnnouncement,
     addPicture,
     deletePicture,
     getPicture,
-    getAnnouncement
+    getAnnouncement,
+    getTags
 } = require('../services/announcement.service');
 const { getPaginated } = require('../services/pagination.service');
 const { Announcement } = require('../models');
@@ -194,6 +194,20 @@ router.delete(
     
     await deletePicture(id, companyId);
     res.json('Announcement picture deleted succesfully.');
+  }
+);
+
+// Get Tags
+router.get(
+  '/announcementstags',
+  async (req, res) => {
+    var tags = await getTags();
+    var response = [];
+    tags.forEach(tag => {
+      response.push({ title: tag })
+    });
+
+    res.json(response);
   }
 );
 
