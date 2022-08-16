@@ -13,6 +13,7 @@ const Home = () => {
     const [myAnnouncements, setMyAnnouncements] = useState([]);
 
     const [tags, setTags] = useState([]);
+    const [searchByTags, setSearchByTags] = useState([]);
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -25,7 +26,12 @@ const Home = () => {
 
     useEffect(() => {
         const getApiData = async () => {
-            const sortCriterium = `?limit=${rowsPerPage}&skip=${page * rowsPerPage}&sortProps[0]=${sortBy}&sortOrder[0]=${sortOrder}`;
+            var sortCriterium = `?limit=${rowsPerPage}&skip=${page * rowsPerPage}&sortProps[0]=${sortBy}&sortOrder[0]=${sortOrder}`;
+            if(searchByTags.length != 0) {
+                searchByTags.forEach((tag, index) => {
+                    sortCriterium += `&searchByTags[${index}]=${tag}`
+                });
+            }
 
             var fetchAnnouncements = await (await fetchData(`announcements${sortCriterium}`)).json();
             setAnnouncements(fetchAnnouncements.Items);
@@ -45,7 +51,7 @@ const Home = () => {
         }
 
         getApiData();
-    }, [rowsPerPage, page, sortBy, sortOrder]);
+    }, [rowsPerPage, page, sortBy, sortOrder, searchByTags]);
 
     const renderAnnouncements = (listOfAnnouncements) => {
         return (
@@ -90,11 +96,13 @@ const Home = () => {
                     renderInput={(params) => <TextField {...params} label="Sort Order" />}
                     onChange={(event, value) => changeSortByOrder(value)}
                 />
+
                 <Autocomplete
                     multiple
                     className="sortByTags"
                     options={tags}
-                    getOptionLabel={(option) => option.title}
+                    getOptionLabel={option => option.title}
+                    isOptionEqualToValue={(option, value) => option.title === value.title}
                     sx={{ width: 300 }}
                     renderInput={(params) => (
                         <TextField
@@ -103,18 +111,19 @@ const Home = () => {
                             label="Tags"
                         />
                     )}
-                    onChange={(event, value) => searchByTag(value)}
+                    onChange={filterByTags}
                 />
             </>
         )
     }
 
-    const searchByTag = (values) => {
-        var selectedTags = [];
-        values.forEach(tagObject => {
-            selectedTags.push(tagObject.title);
+    const filterByTags = (event, values) => {
+        var tags = [];
+        values.forEach(tag => {
+            tags.push(tag.title);
         });
-        setTags(selectedTags);
+
+        setSearchByTags(tags);
     }
 
     const changeSortByCriterium = (value) => {

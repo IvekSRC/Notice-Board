@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
  */
 const getPaginated = async (Model, req, res) => {
   try {
-    let { skip = 0, limit = 10, sortProps, sortOrder } = req.query;
+    let { skip = 0, limit = 10, sortProps, sortOrder, searchByTags } = req.query;
     const parentReference = req.parentReference;
 
     const sortable = Object.keys(Model.schema.tree);
@@ -15,7 +15,21 @@ const getPaginated = async (Model, req, res) => {
       isSortable = sortProps.every((sortBy) => sortable.includes(sortBy));
     }
     
-    const query = Model.find(parentReference).limit(limit).skip(skip);
+    var query;
+    if(searchByTags) {
+      query = Model.find(
+        {
+          ...parentReference, 
+          tags: { $in: searchByTags } 
+        }
+      ).limit(limit).skip(skip);
+    } else {
+      query = Model.find(
+        {
+          ...parentReference, 
+        }
+      ).limit(limit).skip(skip);
+    }
 
     const sortBy = {};
     if (isSortable == true) {

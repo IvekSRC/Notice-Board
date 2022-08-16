@@ -766,6 +766,7 @@ body {
 /* Home Page - Company part */
 
 .homeBackground {
+  height: max-content;
   background-image: url('../public/images/homeBackground.png');
   background-repeat: no-repeat;
   background-size: cover;
