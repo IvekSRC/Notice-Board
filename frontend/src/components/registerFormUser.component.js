@@ -77,12 +77,7 @@ const RegisterForm = () => {
         const response = await (await fetchData('users/register', 'POST', newUser)).json();
         
         localStorage.setItem('token', response.token);
-        localStorage.setItem('email', response.user.email);
-        localStorage.setItem('firstName', response.user.firstName);
-        localStorage.setItem('lastName', response.user.lastName);
-        localStorage.setItem('nickName', response.user.nickName);
-        localStorage.setItem('gender', response.user.gender);
-        localStorage.setItem('country', response.user.country);
+        localStorage.setItem('loggedEntity', 'user');
         
         window.location.replace('/');
     }

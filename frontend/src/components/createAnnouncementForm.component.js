@@ -146,7 +146,7 @@ const CreateAnnouncementForm = (tags) => {
                       <input type="checkbox" id="cb1"/>
                       <label htmlFor="cb1" id='termsLabel'>I agree with terms and conditions</label>
                   </div>
-                <input className="button registerCompanyButton" type="button" value="Register" onClick={createAnnouncement}/>
+                <input className="button registerCompanyButton" type="button" value="Create" onClick={createAnnouncement}/>
               </form>
             </div>
           </div>

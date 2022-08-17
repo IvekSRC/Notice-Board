@@ -73,21 +73,12 @@ const RegisterForm = () => {
         gender: gender,
         country: country
       }
-
-      console.log(newCompany);
       
       const response =  await (await fetchData('companys/register', 'POST', newCompany)).json();
-
-      console.log(response)
       
       localStorage.setItem('token', response.token);
-      localStorage.setItem('email', response.company.email);
-      localStorage.setItem('firstName', response.company.firstName);
-      localStorage.setItem('lastName', response.company.lastName);
-      localStorage.setItem('companyName', response.company.name);
-      localStorage.setItem('gender', response.company.gender);
-      localStorage.setItem('country', response.company.country);
       localStorage.setItem('loggedEntity', 'company');
+      localStorage.setItem('companyId', response.company._id);
 
       window.location.replace('/');
   }

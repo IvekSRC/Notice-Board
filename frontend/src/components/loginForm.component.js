@@ -31,6 +31,7 @@ const LoginForm = () => {
             localStorage.setItem('token', response.token);
             if(loginVia) {
                 localStorage.setItem('loggedEntity', 'company');
+                localStorage.setItem('companyId', response.company._id);
             } else {
                 localStorage.setItem('loggedEntity', 'user');
             }

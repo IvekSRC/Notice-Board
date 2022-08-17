@@ -1,5 +1,7 @@
 import { fetchData } from "../services/fetch.service";
 import { useState, useEffect } from "react";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Announcement = (announcement) => {
     const [picture, setPicture] = useState();
@@ -15,11 +17,26 @@ const Announcement = (announcement) => {
         getApiData();
     }, []);
 
+    const deleteAnnouncement = async () => {
+        const token = localStorage.getItem('token');
+        await fetchData(`announcements/${announcement.announcement._id}`, 'DELETE', undefined, token);
+        window.location.replace('/');
+    }
+
     return (
         <>
-            <h3 className="announcementName">
-                {announcement.announcement.name}
-            </h3>
+            <div>
+                <h3 className="announcementName">
+                    {announcement.announcement.name}
+                </h3>
+                {
+                    localStorage.getItem('loggedEntity') == 'company' && localStorage.getItem('companyId') == announcement.announcement.companyId ?
+                    <IconButton aria-label="delete" onClick={deleteAnnouncement}>
+                        <DeleteIcon />
+                    </IconButton> :
+                    <></>
+                }
+            </div>
             {
                 <img src={picture} className="announcementPicture"/>
             }

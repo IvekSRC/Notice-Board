@@ -12,19 +12,14 @@ import Button from '@mui/material/Button';
 const Home = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [myAnnouncements, setMyAnnouncements] = useState([]);
-
     const [tags, setTags] = useState([]);
     const [searchByTags, setSearchByTags] = useState([]);
-
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [numberOfAnnouncements, setNumberOfAnnouncements] = React.useState(0);
-
     const [isExpanded, setIsExpanded] = React.useState(true);
-
     const [sortBy, setSortBy] = React.useState('_id');
     const [sortOrder, setSortOrder] = React.useState(1);
-
     const [displayOption, setDisplayOption] = React.useState(1);
 
     useEffect(() => {
@@ -99,7 +94,6 @@ const Home = () => {
                     renderInput={(params) => <TextField {...params} label="Sort Order" />}
                     onChange={(event, value) => changeSortByOrder(value)}
                 />
-
                 <Autocomplete
                     multiple
                     className="sortByTags"

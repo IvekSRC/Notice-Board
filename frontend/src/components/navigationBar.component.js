@@ -1,5 +1,5 @@
 import { AiFillHome } from 'react-icons/ai';
-import { BiLogIn, BiLogInCircle, BiLogOutCircle, BiRegistered } from 'react-icons/bi';
+import { BiLogIn, BiLogOutCircle, BiRegistered } from 'react-icons/bi';
 import { isLogged, logOut } from '../services/auth.services';
 
 const NavigationBar = () => {
