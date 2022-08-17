@@ -7,6 +7,7 @@ import { isLogged, loggedEntity } from "../services/auth.services";
 import TablePagination from '@mui/material/TablePagination';
 import CreateAnnouncementForm from "../components/createAnnouncementForm.component";
 import { Autocomplete, TextField } from "@mui/material";
+import Button from '@mui/material/Button';
 
 const Home = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -24,6 +25,8 @@ const Home = () => {
     const [sortBy, setSortBy] = React.useState('_id');
     const [sortOrder, setSortOrder] = React.useState(1);
 
+    const [displayOption, setDisplayOption] = React.useState(1);
+
     useEffect(() => {
         const getApiData = async () => {
             var sortCriterium = `?limit=${rowsPerPage}&skip=${page * rowsPerPage}&sortProps[0]=${sortBy}&sortOrder[0]=${sortOrder}`;
@@ -38,7 +41,7 @@ const Home = () => {
             setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
 
             if(isLogged() == true) {
-                if(loggedEntity() == 'company') {
+                if(loggedEntity() == 'company' && displayOption == 1) {
                     const token = localStorage.getItem('token');
                     fetchAnnouncements = await (await fetchData(`announcementsme${sortCriterium}`, 'GET', undefined, token)).json();
                     setMyAnnouncements(fetchAnnouncements.Items);
@@ -51,7 +54,7 @@ const Home = () => {
         }
 
         getApiData();
-    }, [rowsPerPage, page, sortBy, sortOrder, searchByTags]);
+    }, [rowsPerPage, page, sortBy, sortOrder, searchByTags, displayOption]);
 
     const renderAnnouncements = (listOfAnnouncements) => {
         return (
@@ -113,8 +116,25 @@ const Home = () => {
                     )}
                     onChange={filterByTags}
                 />
+                {
+                    loggedEntity() == 'company' ? 
+                    <Button onClick={changeDisplayAnnouncements} className='displayAllAnnouncements'>
+                        {
+                            displayOption == 1 ?
+                            <span>Show all Announcements</span>
+                            :
+                            <span>Show just my Announcements</span>
+                        }
+                    </Button> :
+                    <Button disabled onClick={changeDisplayAnnouncements} className='displayAllAnnouncements'>Show all Announcements</Button>
+                }
             </>
         )
+    }
+
+    const changeDisplayAnnouncements = () => {
+        setDisplayOption(displayOption * (-1));
+        setPage(0);
     }
 
     const filterByTags = (event, values) => {
@@ -177,7 +197,7 @@ const Home = () => {
                         <></>
                         :
                         <>
-                            <CreateAnnouncementForm/>
+                            <CreateAnnouncementForm tags={tags}/>
                         </>
                     }
                 </div>
@@ -200,7 +220,10 @@ const Home = () => {
                         loggedEntity() == 'user' ?
                         renderAnnouncements(announcements)
                         :
+                        displayOption == 1 ?
                         renderCompanyAnnouncements(myAnnouncements)
+                        :
+                        renderCompanyAnnouncements(announcements)
                     }
                 </>
                 :

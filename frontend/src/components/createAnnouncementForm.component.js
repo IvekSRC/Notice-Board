@@ -1,12 +1,26 @@
 import { MdDriveFileRenameOutline, MdOutlineCategory, MdOutlineDescription } from 'react-icons/md'
 import { BiTimeFive } from 'react-icons/bi';
 import { AiOutlineFileImage } from 'react-icons/ai'
-import { fetchData, fetchData2 } from '../services/fetch.service';
+import { fetchData } from '../services/fetch.service';
 import validateRequiredField from '../validators/validateRequiredField.validator';
+import { Autocomplete, TextField } from "@mui/material";
+import Chip from '@mui/material/Chip';
+import { useState } from "react";
 
-const CreateAnnouncementForm = () => {
+const CreateAnnouncementForm = (tags) => {
+    const [selectedTags, setTags] = useState([]);
+
+    const collectTags = (event, values) => {
+      var tags = [];
+      values.forEach(tag => {
+          tags.push(tag);
+      });
+
+      setTags(tags);
+    }
+
     const createAnnouncement = async () => {
-          // Collect require data
+        // Collect require data
         const name = document.getElementById('createName');
         const category = document.getElementById('createCategory');
         const endTime = document.getElementById('createEndTime');
@@ -55,6 +69,7 @@ const CreateAnnouncementForm = () => {
           description: description.value,
           endTime: endTime.value,
           status: privateStatus,
+          tags: selectedTags
         }
         
         const token = localStorage.getItem('token');
@@ -98,6 +113,28 @@ const CreateAnnouncementForm = () => {
                 </div>
                 <div className="input_field createAnnouncementFileInput"> <span><i aria-hidden="false" className="fa fa-envelope"><AiOutlineFileImage className='registrationIcon'/></i></span>
                   <input type="file" name="image" required id='createImage'/>
+                </div>   
+                <div className="chooseYourTags">             
+                  <Autocomplete
+                      className='chooseYourTagsChild'
+                      multiple
+                      id="tags-filled"
+                      options={tags.tags.map((option) => option.title)}
+                      freeSolo
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                            <Chip label={option} {...getTagProps({ index })} />
+                        ))
+                      }
+                      renderInput={(params) => (
+                      <TextField
+                          {...params}
+                          label="Tags"
+                          placeholder="Choose your tags"
+                      />
+                      )}
+                      onChange={collectTags}
+                  />
                 </div>
                 <div className="input_field radio_option">
                   <input type="radio" name="radiogroup1" id="createPrivateStatus" value='Private'/>

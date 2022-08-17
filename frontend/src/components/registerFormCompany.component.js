@@ -87,6 +87,7 @@ const RegisterForm = () => {
       localStorage.setItem('companyName', response.company.name);
       localStorage.setItem('gender', response.company.gender);
       localStorage.setItem('country', response.company.country);
+      localStorage.setItem('loggedEntity', 'company');
 
       window.location.replace('/');
   }

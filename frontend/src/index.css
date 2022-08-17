@@ -125,6 +125,7 @@ li.dropdown {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  min-height: 100vh;
 }
 
 .announcement {
@@ -766,7 +767,7 @@ body {
 /* Home Page - Company part */
 
 .homeBackground {
-  height: max-content;
+  height: 100%;
   background-image: url('../public/images/homeBackground.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -830,7 +831,7 @@ body {
 .expanded:active {
   box-shadow: #3c4fe0 0 3px 7px inset;
   transform: translateY(2px);
-}
+}sort
 
 .collapsed:focus {
   box-shadow: #4af2ef 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #4af2ef 0 -3px 0 inset;
@@ -844,6 +845,10 @@ body {
 .collapsed:active {
   box-shadow: #4af2ef 0 3px 7px inset;
   transform: translateY(2px);
+}
+
+.chooseYourTags {
+  background-color: white;
 }
 
 .createAnnouncementForm {
