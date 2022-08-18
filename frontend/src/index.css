@@ -930,7 +930,7 @@ body {
 .createAnnouncementForm .textarea_field > span > i {
   padding-top: 10px;
 }
-.createAnnouncementForm input[type="text"], .createAnnouncementForm input[type="email"], .createAnnouncementForm input[type="password"], .createAnnouncementForm input[type='date'], .createAnnouncementForm input[type='file'] {
+.createAnnouncementForm input[type="text"], .createAnnouncementForm input[type="email"], .createAnnouncementForm input[type="password"], .createAnnouncementForm input[type='date'], .createAnnouncementForm input[type='file'], select {
   width: 100%;
   padding: 8px 10px 9px 35px;
   height: 35px;
@@ -942,10 +942,10 @@ body {
   -ms-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
-.createAnnouncementForm input[type="text"]:hover, .createAnnouncementForm input[type="email"]:hover, .createAnnouncementForm input[type="password"]:hover, .createAnnouncementForm input[type='date']:hover, .createAnnouncementForm input[type='file']:hover {
+.createAnnouncementForm input[type="text"]:hover, .createAnnouncementForm input[type="email"]:hover, .createAnnouncementForm input[type="password"]:hover, .createAnnouncementForm input[type='date']:hover, .createAnnouncementForm input[type='file']:hover, select {
   background: #fafafa;
 }
-.createAnnouncementForm input[type="text"]:focus, .createAnnouncementForm input[type="email"]:focus, .createAnnouncementForm input[type="password"]:focus, .createAnnouncementForm input[type='date']:focus, .createAnnouncementForm input[type='file']:focus {
+.createAnnouncementForm input[type="text"]:focus, .createAnnouncementForm input[type="email"]:focus, .createAnnouncementForm input[type="password"]:focus, .createAnnouncementForm input[type='date']:focus, .createAnnouncementForm input[type='file']:focus, select {
   -webkit-box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
   -moz-box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
   box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);

@@ -48,7 +48,11 @@ const announcementSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
         require: true
-    }
+    },
+    userIds: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }]
 });
 
 announcementSchema.virtual('pictureUrl')

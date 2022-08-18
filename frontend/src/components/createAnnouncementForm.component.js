@@ -31,9 +31,6 @@ const CreateAnnouncementForm = (tags) => {
         if(validateRequiredField(name) == false) {
           isValid = false;
         }
-        if(validateRequiredField(category) == false) {
-          isValid = false;
-        }
         if(validateRequiredField(endTime) == false) {
           isValid = false;
         }
@@ -103,7 +100,10 @@ const CreateAnnouncementForm = (tags) => {
                   <input type="text" name="name" placeholder="Name" required id='createName' minLength={3}/>
                 </div>
                 <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><MdOutlineCategory className='registrationIcon'/></i></span>
-                  <input type="text" name="category" placeholder="Category" required id='createCategory' minLength={3}/>
+                  <select id="createCategory" name="cetegory" placeholder='Category' required>
+                    <option value="Letovanje">Letovanje</option>
+                    <option value="Zimovanje">Zimovanje</option>
+                  </select>
                 </div>
                 <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><MdOutlineDescription className='registrationIcon'/></i></span>
                   <input type="text" name="description" placeholder="Description" id='createDescription' maxLength={500}/>

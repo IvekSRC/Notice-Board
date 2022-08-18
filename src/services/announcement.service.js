@@ -136,6 +136,50 @@ const getTags = async () => {
   return listOfTags;
 }
 
+const addToFavorites = async (userId, idAnnouncement) => {
+  const announcement = await Announcement.findById(idAnnouncement);
+
+  if (!announcement) {
+    throw new Error("Can't found.");
+  }
+
+  if(announcement.userIds.includes(userId)) {
+    throw new Error("Announcement is already in your favorite list.");
+  }
+
+  announcement.userIds.push(userId);
+  await announcement.save();
+}
+
+const removeFromFavorites = async (userId, idAnnouncement) => {
+  const announcement = await Announcement.findById(idAnnouncement);
+
+  if (!announcement) {
+    throw new Error("Can't found.");
+  }
+
+  if(!announcement.userIds.includes(userId)) {
+    throw new Error("Favorite list does not contain forwarded announcemnt.");
+  }
+
+  announcement.userIds.pop(userId);
+  await announcement.save();
+}
+
+const isAddedToFavorites = async (userId, idAnnouncement) => {
+  const announcement = await Announcement.findById(idAnnouncement);
+
+  if (!announcement) {
+    throw new Error("Can't found.");
+  }
+
+  if(announcement.userIds.includes(userId)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 module.exports = {
     createAnnouncement,
     updateAnnouncement,
@@ -145,5 +189,8 @@ module.exports = {
     addPicture,
     deletePicture,
     getPicture,
-    getTags
+    getTags,
+    addToFavorites,
+    removeFromFavorites,
+    isAddedToFavorites
 };

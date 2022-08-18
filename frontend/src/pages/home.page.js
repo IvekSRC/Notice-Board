@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 const Home = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [myAnnouncements, setMyAnnouncements] = useState([]);
+    const [favorites, setFavorites] = useState([]);
     const [tags, setTags] = useState([]);
     const [searchByTags, setSearchByTags] = useState([]);
     const [page, setPage] = React.useState(0);
@@ -20,7 +21,7 @@ const Home = () => {
     const [isExpanded, setIsExpanded] = React.useState(true);
     const [sortBy, setSortBy] = React.useState('_id');
     const [sortOrder, setSortOrder] = React.useState(1);
-    const [displayOption, setDisplayOption] = React.useState(1);
+    const [displayOption, setDisplayOption] = useState(1);
 
     useEffect(() => {
         const getApiData = async () => {
@@ -40,6 +41,11 @@ const Home = () => {
                     const token = localStorage.getItem('token');
                     fetchAnnouncements = await (await fetchData(`announcementsme${sortCriterium}`, 'GET', undefined, token)).json();
                     setMyAnnouncements(fetchAnnouncements.Items);
+                    setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
+                } else if (loggedEntity() == 'user' && displayOption == 1) {
+                    const token = localStorage.getItem('token');
+                    fetchAnnouncements = await (await fetchData('readfavorites', 'GET', undefined, token)).json();
+                    setFavorites(fetchAnnouncements.Items);
                     setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
                 }
             }
@@ -119,8 +125,18 @@ const Home = () => {
                             :
                             <span>Show just my Announcements</span>
                         }
-                    </Button> :
-                    <Button disabled onClick={changeDisplayAnnouncements} className='displayAllAnnouncements'>Show all Announcements</Button>
+                    </Button> : <></>
+                }
+                {
+                    loggedEntity() == 'user' ? 
+                    <Button onClick={changeDisplayAnnouncements} className='displayAllAnnouncements'>
+                        {
+                            displayOption == 1 ?
+                            <span>Favorites</span>
+                            :
+                            <span>Show all Announcements</span>
+                        }
+                    </Button> : <></>
                 }
             </>
         )
@@ -212,12 +228,10 @@ const Home = () => {
                 <>
                     {
                         loggedEntity() == 'user' ?
-                        renderAnnouncements(announcements)
+                            displayOption == 1 ?
+                            renderAnnouncements(announcements) : renderAnnouncements(favorites)
                         :
-                        displayOption == 1 ?
-                        renderCompanyAnnouncements(myAnnouncements)
-                        :
-                        renderCompanyAnnouncements(announcements)
+                            displayOption == 1 ? renderCompanyAnnouncements(myAnnouncements) : renderCompanyAnnouncements(announcements)
                     }
                 </>
                 :

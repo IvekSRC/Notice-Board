@@ -1,6 +1,6 @@
 const express = require('express');
 const { PICTURE } = require('../constants/folderNames.constants');
-const { authForCompany } = require('../middlewares/auth.middleware');
+const { authForCompany, authForUser } = require('../middlewares/auth.middleware');
 const router = new express.Router();
 const upload = require('../middlewares/upload.middleware');
 const {
@@ -11,7 +11,10 @@ const {
     deletePicture,
     getPicture,
     getAnnouncement,
-    getTags
+    getTags,
+    addToFavorites,
+    removeFromFavorites,
+    isAddedToFavorites
 } = require('../services/announcement.service');
 const { getPaginated } = require('../services/pagination.service');
 const { Announcement } = require('../models');
@@ -105,6 +108,28 @@ router.get('/announcementsme', authForCompany, async (req, res) => {
     } catch (error) {
       res.status(500).json();
     }
+});
+
+// Get Favorites
+router.get('/readfavorites', authForUser, async (req, res) => {
+  const { user: { id: userId } } = req;
+
+  try {
+    req.parentReference = { userIds: userId }
+    const results = await getPaginated(Announcement, req, res);
+
+    if (!results) {
+      return res.status(404).json();
+    }
+
+    res.json({
+      TotalPages: results.totalPages,
+      CurrentPage: results.currentPage,
+      Items: results.results,
+    });
+  } catch (error) {
+    res.status(500).json();
+  }
 });
 
 // Delete Announcement
@@ -210,5 +235,66 @@ router.get(
     res.json(response);
   }
 );
+
+// Add to favorites
+router.patch(
+  '/addtofavorites/:id',
+  authForUser,
+  async (req, res) => {
+    const { params: { id: idAnnouncement } , user: { _id: userId }} = req;
+    
+    try {
+      await addToFavorites(userId, idAnnouncement);
+
+      res.json("Successfully added to your favorite list.");
+    } catch (error) {
+      res.status(404).json(error.message);
+    }
+  }
+)
+
+// Remove from favorites
+router.patch(
+  '/removefromfavorites/:id',
+  authForUser,
+  async (req, res) => {
+    const { params: { id: idAnnouncement } , user: { _id: userId }} = req;
+    
+    try {
+      await removeFromFavorites(userId, idAnnouncement);
+
+      res.json("Successfully deleted from your favorite list.");
+    } catch (error) {
+      res.status(404).json(error.message);
+    }
+  }
+)
+
+// Is added to favorites
+router.get(
+  '/isaddedtofavorites/:id',
+  authForUser,
+  async (req, res) => {
+    const { params: { id: idAnnouncement } , user: { _id: userId }} = req;
+
+    try {
+      const isAdded = await isAddedToFavorites(userId, idAnnouncement);
+
+      if(isAdded) {
+        res.json({
+          message: "Favorite list contain that announcement.",
+          isAdded: isAdded
+        })
+      } else {
+        res.json({
+          message: "Favorite list does not contain that announcement.",
+          isAdded: isAdded
+        })
+      }
+    } catch (error) {
+      res.status(404).json(error.message);
+    }
+  }
+)
 
 module.exports = router;
