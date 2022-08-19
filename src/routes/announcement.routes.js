@@ -89,7 +89,7 @@ router.get('/announcements/:id', async (req, res) => {
 });
 
 // Get My Announcement
-router.get('/announcementsme', authForCompany, async (req, res) => {
+router.get('/announcements/all/me', authForCompany, async (req, res) => {
     const { company: { id: companyId } } = req;
 
     try {
@@ -111,7 +111,7 @@ router.get('/announcementsme', authForCompany, async (req, res) => {
 });
 
 // Get Favorites
-router.get('/readfavorites', authForUser, async (req, res) => {
+router.get('/announcements/favorites/all', authForUser, async (req, res) => {
   const { user: { id: userId } } = req;
 
   try {
@@ -132,10 +132,71 @@ router.get('/readfavorites', authForUser, async (req, res) => {
   }
 });
 
+// Add to favorites
+router.patch(
+  '/announcements/favorites/add/:id',
+  authForUser,
+  async (req, res) => {
+    const { params: { id: idAnnouncement } , user: { _id: userId }} = req;
+    
+    try {
+      await addToFavorites(userId, idAnnouncement);
+
+      res.json("Successfully added to your favorite list.");
+    } catch (error) {
+      res.status(404).json(error.message);
+    }
+  }
+)
+
+// Remove from favorites
+router.patch(
+  '/announcements/favorites/delete/:id',
+  authForUser,
+  async (req, res) => {
+    const { params: { id: idAnnouncement } , user: { _id: userId }} = req;
+    
+    try {
+      await removeFromFavorites(userId, idAnnouncement);
+
+      res.json("Successfully deleted from your favorite list.");
+    } catch (error) {
+      res.status(404).json(error.message);
+    }
+  }
+)
+
+// Is added to favorites
+router.get(
+  '/announcements/favorites/get/:id',
+  authForUser,
+  async (req, res) => {
+    const { params: { id: idAnnouncement } , user: { _id: userId }} = req;
+
+    try {
+      const isAdded = await isAddedToFavorites(userId, idAnnouncement);
+
+      if(isAdded) {
+        res.json({
+          message: "Favorite list contain that announcement.",
+          isAdded: isAdded
+        })
+      } else {
+        res.json({
+          message: "Favorite list does not contain that announcement.",
+          isAdded: isAdded
+        })
+      }
+    } catch (error) {
+      res.status(404).json(error.message);
+    }
+  }
+)
+
 // Delete Announcement
 router.delete('/announcements/:id', authForCompany, async (req, res) => {
     const { company: { _id: companyId }, params: { id: announcementId } } = req;
-  
+  console.log('test');
     try {
       const announcement = await deleteAnnouncement(companyId, announcementId);
   
@@ -224,7 +285,7 @@ router.delete(
 
 // Get Tags
 router.get(
-  '/announcementstags',
+  '/announcements/tags/all',
   async (req, res) => {
     var tags = await getTags();
     var response = [];
@@ -235,66 +296,5 @@ router.get(
     res.json(response);
   }
 );
-
-// Add to favorites
-router.patch(
-  '/addtofavorites/:id',
-  authForUser,
-  async (req, res) => {
-    const { params: { id: idAnnouncement } , user: { _id: userId }} = req;
-    
-    try {
-      await addToFavorites(userId, idAnnouncement);
-
-      res.json("Successfully added to your favorite list.");
-    } catch (error) {
-      res.status(404).json(error.message);
-    }
-  }
-)
-
-// Remove from favorites
-router.patch(
-  '/removefromfavorites/:id',
-  authForUser,
-  async (req, res) => {
-    const { params: { id: idAnnouncement } , user: { _id: userId }} = req;
-    
-    try {
-      await removeFromFavorites(userId, idAnnouncement);
-
-      res.json("Successfully deleted from your favorite list.");
-    } catch (error) {
-      res.status(404).json(error.message);
-    }
-  }
-)
-
-// Is added to favorites
-router.get(
-  '/isaddedtofavorites/:id',
-  authForUser,
-  async (req, res) => {
-    const { params: { id: idAnnouncement } , user: { _id: userId }} = req;
-
-    try {
-      const isAdded = await isAddedToFavorites(userId, idAnnouncement);
-
-      if(isAdded) {
-        res.json({
-          message: "Favorite list contain that announcement.",
-          isAdded: isAdded
-        })
-      } else {
-        res.json({
-          message: "Favorite list does not contain that announcement.",
-          isAdded: isAdded
-        })
-      }
-    } catch (error) {
-      res.status(404).json(error.message);
-    }
-  }
-)
 
 module.exports = router;

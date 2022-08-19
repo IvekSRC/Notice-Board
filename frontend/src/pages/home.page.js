@@ -39,18 +39,18 @@ const Home = () => {
             if(isLogged() == true) {
                 if(loggedEntity() == 'company' && displayOption == 1) {
                     const token = localStorage.getItem('token');
-                    fetchAnnouncements = await (await fetchData(`announcementsme${sortCriterium}`, 'GET', undefined, token)).json();
+                    fetchAnnouncements = await (await fetchData(`announcements/all/me${sortCriterium}`, 'GET', undefined, token)).json();
                     setMyAnnouncements(fetchAnnouncements.Items);
                     setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
                 } else if (loggedEntity() == 'user' && displayOption == 1) {
                     const token = localStorage.getItem('token');
-                    fetchAnnouncements = await (await fetchData('readfavorites', 'GET', undefined, token)).json();
+                    fetchAnnouncements = await (await fetchData('announcements/favorites/all', 'GET', undefined, token)).json();
                     setFavorites(fetchAnnouncements.Items);
                     setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
                 }
             }
 
-            const fetchTags = await (await fetchData('announcementstags')).json();
+            const fetchTags = await (await fetchData('announcements/tags/all')).json();
             setTags(fetchTags);
         }
 

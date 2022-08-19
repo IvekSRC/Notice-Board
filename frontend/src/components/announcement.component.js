@@ -23,7 +23,7 @@ const Announcement = (announcement) => {
 
             if(localStorage.getItem('loggedEntity') == 'user') {
                 const token = localStorage.getItem('token');
-                const res = await (await fetchData(`isaddedtofavorites/${announcement.announcement._id}`, 'GET', undefined, token)).json();
+                const res = await (await fetchData(`announcements/favorites/get/${announcement.announcement._id}`, 'GET', undefined, token)).json();
                 setIsAdded(res.isAdded);
             }
         }
@@ -42,13 +42,13 @@ const Announcement = (announcement) => {
 
     const addToFavorites = async () => {
         const token = localStorage.getItem('token');
-        await fetchData(`addtofavorites/${announcement.announcement._id}`, 'PATCH', undefined, token);
+        await fetchData(`announcements/favorites/add/${announcement.announcement._id}`, 'PATCH', undefined, token);
         setIsAdded(true);
     }
 
     const removeFromFavorites = async () => {
         const token = localStorage.getItem('token');
-        await fetchData(`removefromfavorites/${announcement.announcement._id}`, 'PATCH', undefined, token);
+        await fetchData(`announcements/favorites/delete/${announcement.announcement._id}`, 'PATCH', undefined, token);
         setIsAdded(false);
     }
 
