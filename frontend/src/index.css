@@ -125,7 +125,7 @@ li.dropdown {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  min-height: 100vh;
+  width: 98vw;
 }
 
 .announcement {
@@ -147,10 +147,6 @@ li.dropdown {
   height: auto;
 }
 
-.announcementName {
-  text-align: center;
-}
-
 .displayProp {
   font-weight: 500;
 }
@@ -159,10 +155,42 @@ li.dropdown {
   font-weight: 200;
 }
 
+.seeMoreDetails {
+  text-align: center;
+}
+
+.announcementHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.favorites {
+  width: 25px;
+  height: 25px;
+  margin-top: 10px;
+}
+
 /* Register form */
 
+.errorMessage {
+  color: red;
+}
+
+.passwordVisible {
+  position: absolute;
+  right: 10px;
+  margin-top: 4px;
+}
+
+.registrationIcon {
+  position: relative;
+  margin: 35% 20% 20% 20%;
+}
+
 .registerImage {
-  height: 100vh;
+  min-height: 100vh;
   background-image: url('../public/images/registrationBackground.jpg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -191,7 +219,7 @@ body {
   width: 40%;
   height: min-content;
   box-sizing: border-box;
-  padding: 25px;
+  padding: 24px;
   margin: 1% auto 0;
   margin-right: 45%;
   position: relative;
@@ -256,7 +284,9 @@ body {
 }
 
 .input_field {
-  margin-top: 3.9%
+  margin-top: 3.9%;
+  display: flex;
+  flex-direction: row;
 }
 
 .form_wrapper .input_field > span > i {
@@ -321,6 +351,7 @@ body {
 }
 .form_container .row .col_half.last {
   border-left: 1px solid #cccccc;
+
 }
 .checkbox_option label {
   margin-right: 1em;
@@ -574,11 +605,6 @@ body {
   }
 }
 
-.registrationIcon {
-  position: relative;
-  margin: 35% 20% 20% 20%;
-}
-
 .form_container {
   height: 80%;
 }
@@ -592,7 +618,7 @@ body {
 }
 
 .registerHeader {
-  color: #0688a5
+  color: #01BCE7
 }
 
 .registerCompanyButton {
@@ -622,6 +648,11 @@ body {
 
 /* Login Form */
 
+.showLogInPassword {
+  display: flex;
+  flex-direction: row;
+}
+
 .loginImage {
   height: 100vh;
   background-image: url('../public/images/loginBackground.png');
@@ -637,11 +668,22 @@ body {
   width: 25%;
   margin-left: 20%;
   margin-top: 10%;
+  min-width: min-content;
 }
 
 .loginInputName, .loginInputPassword {
   height: 25px;
   border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.loginInputName {
+  width: 85%;
+  min-width: 85%;
+}
+
+.loginInputPassword {
+  width: 85%;
+  min-width: 85%;
 }
 
 .loginSubmitButton {
@@ -669,6 +711,7 @@ body {
   padding: 2rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 7px;
+  min-width: max-content;
 }
 
 .loginError {
@@ -689,10 +732,15 @@ body {
   margin: 10px;
 }
 
+.logInPass {
+  margin-left: 3%;
+}
+
 .logInViaLabel {
   font-size: large;
   margin-right: 5%;
   color: #0e181b;
+  min-width: max-content;
 }
 
 .logInViaDiv {
@@ -726,9 +774,22 @@ body {
   position: relative;
   width: 80px;
   height: 80px;
-  margin: 10%;
-  margin-left: 40%;
 }
+
+.logInLoading {
+  text-align: center;
+  margin: 10% 10% 0% 10%;
+}
+
+.logInSuccessfullyIcon {
+  margin-left: 5%;
+}
+
+.logInSuccessfullyTitle {
+  margin-top: 2%;
+  min-width: max-content;
+}
+
 .lds-ring div {
   box-sizing: border-box;
   display: block;
@@ -760,8 +821,10 @@ body {
 }
 
 .succesfullyLoggedIn {
+  display: flex;
+  flex-direction: row;
   font-size: large;
-  text-align: center;
+  justify-content: center;
 }
 
 /* Home Page - Company part */
@@ -771,6 +834,7 @@ body {
   background-image: url('../public/images/homeBackground.png');
   background-repeat: no-repeat;
   background-size: cover;
+  min-height: 100vh;
 }
 
 .createNewAnnouncement {
@@ -993,14 +1057,28 @@ body {
 }
 
 .sortingPart {
-  border: 1px solid black;
+  border: 1px solid #105186;
+  border-left: 5px solid #2196F3;
   border-radius: 10px;
   margin: 2%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 .sortBy, .sortOrder, .sortByTags {
   margin: 1%;
+}
+
+.sortIcon {
+  margin-top: 1.5%;
+}
+
+.showAnnouncementOption, .showFavoritesOption {
+  color: #000000;
+}
+
+.showAnnouncementOption:hover, .showFavoritesOption:hover {
+  color: white;
 }

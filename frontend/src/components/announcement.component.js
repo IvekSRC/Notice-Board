@@ -66,7 +66,7 @@ const Announcement = (announcement) => {
 
     return (
         <>
-            <div>
+            <div className="announcementHeader">
                 <h3 className="announcementName">
                     {announcement.announcement.name}
                 </h3>
@@ -79,11 +79,11 @@ const Announcement = (announcement) => {
                 }
                 {
                     localStorage.getItem('loggedEntity') == 'user' && isAdded == true ?
-                    <MdFavorite className='registrationIcon' onClick={removeFromFavorites}/> : <></>
+                    <MdFavorite className='favorites' onClick={removeFromFavorites}/> : <></>
                 }
                 {
                     localStorage.getItem('loggedEntity') == 'user' && isAdded == false ?
-                    <MdFavoriteBorder className='registrationIcon' onClick={addToFavorites}/> : <></>
+                    <MdFavoriteBorder className='favorites' onClick={addToFavorites}/> : <></>
                 }
             </div>
             {
@@ -108,7 +108,7 @@ const Announcement = (announcement) => {
                 </span>
             </p>
 
-            <div>
+            <div className='seeMoreDetails'>
                 <Button onClick={handleOpen}>See more details</Button>
                 <Modal
                     open={open}

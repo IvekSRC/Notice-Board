@@ -8,6 +8,9 @@ import TablePagination from '@mui/material/TablePagination';
 import CreateAnnouncementForm from "../components/createAnnouncementForm.component";
 import { Autocomplete, TextField } from "@mui/material";
 import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import PageviewIcon from '@mui/icons-material/Pageview';
+import { blue } from '@mui/material/colors';
 
 const Home = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -42,7 +45,7 @@ const Home = () => {
                     fetchAnnouncements = await (await fetchData(`announcements/all/me${sortCriterium}`, 'GET', undefined, token)).json();
                     setMyAnnouncements(fetchAnnouncements.Items);
                     setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
-                } else if (loggedEntity() == 'user' && displayOption == 1) {
+                } else if (loggedEntity() == 'user') {
                     const token = localStorage.getItem('token');
                     fetchAnnouncements = await (await fetchData('announcements/favorites/all', 'GET', undefined, token)).json();
                     setFavorites(fetchAnnouncements.Items);
@@ -59,7 +62,7 @@ const Home = () => {
 
     const renderAnnouncements = (listOfAnnouncements) => {
         return (
-            <div>
+            <div className="homePage">
                 <div className="sortingPart">
                     { renderFilterPart() }
                 </div>
@@ -77,6 +80,9 @@ const Home = () => {
     const renderFilterPart = () => {
         return (
             <>
+                <Avatar className="sortIcon" sx={ { bgcolor: blue[500] } }>
+                    <PageviewIcon />
+                </Avatar>
                 <Autocomplete
                     disablePortal
                     className="sortBy"
@@ -121,9 +127,9 @@ const Home = () => {
                     <Button onClick={changeDisplayAnnouncements} className='displayAllAnnouncements'>
                         {
                             displayOption == 1 ?
-                            <span>Show all Announcements</span>
+                            <span className="showAnnouncementOption">Show all Announcements</span>
                             :
-                            <span>Show just my Announcements</span>
+                            <span className="showAnnouncementOption">Show just my Announcements</span>
                         }
                     </Button> : <></>
                 }
@@ -132,9 +138,9 @@ const Home = () => {
                     <Button onClick={changeDisplayAnnouncements} className='displayAllAnnouncements'>
                         {
                             displayOption == 1 ?
-                            <span>Favorites</span>
+                            <span className="showFavoritesOption">Favorites</span>
                             :
-                            <span>Show all Announcements</span>
+                            <span className="showFavoritesOption">Show all Announcements</span>
                         }
                     </Button> : <></>
                 }
@@ -239,6 +245,7 @@ const Home = () => {
             }
 
             <TablePagination
+                className="pagination"
                 component="div"
                 count={numberOfAnnouncements * rowsPerPage}
                 page={page}

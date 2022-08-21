@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { fetchData } from '../services/fetch.service';
 import Switch from '@mui/material/Switch';
+import { BiShow } from "react-icons/bi";
+import { BsPersonCheckFill } from 'react-icons/bs';
 
 const LoginForm = () => {
     // React States
@@ -49,7 +51,7 @@ const LoginForm = () => {
     const redirectToHomePage = () => {
         setTimeout(() => {
             window.location.replace('/');
-        }, 2000)
+        }, 3000000)
     }
 
     const changeLogInVia = () => {
@@ -69,14 +71,24 @@ const LoginForm = () => {
         <div className="loginError">{errorMessages.message}</div>
         );
 
+    const showPassword = () => {
+        var typePass = document.getElementById('loginUserPassword');
+        
+        if(typePass.type === 'text') {
+            typePass.type = 'password'
+        } else {
+            typePass.type = 'text';
+        }
+    }
+
     // JSX code for login form
     const renderForm = (
         <form onSubmit={handleSubmit} className="logInForm">
             <div className="logInViaDiv">
-                <label className="logInViaLabel">You are</label>
-                <label className="logInViaUser" id="logInViaUser">User</label>                
+                <div className="logInViaLabel">You are</div>
+                <div className="logInViaUser" id="logInViaUser">User</div>                
                 <Switch color="primary" id="loginVia" className="loginViaSwitch" onChange={changeLogInVia}/>
-                <label className="logInViaCompany" id="logInViaCompany">Company</label>
+                <div className="logInViaCompany" id="logInViaCompany">Company</div>
             </div>
             <div className="input-container">
                 <label className="logInEmailAndPasswordLabel">Email: </label>
@@ -85,7 +97,10 @@ const LoginForm = () => {
             </div>
             <div className="input-container">
                 <label className="logInEmailAndPasswordLabel">Password: </label>
-                <input type="password" name="pass" required className="loginInputPassword"/>
+                <div className="showLogInPassword">
+                    <input type="password" name="pass" required className="loginInputPassword" id='loginUserPassword'/>
+                    <div id='passVisible' className="logInPass" onClick={showPassword}><BiShow size={25}></BiShow></div>
+                </div>
                 {renderErrorMessage("pass")}
             </div>
             <div className="button-container">
@@ -103,8 +118,13 @@ const LoginForm = () => {
             {
                 isSubmitted ? 
                 <div>
-                    <div className="succesfullyLoggedIn">Successfully logged In</div>
-                    <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+                    <div className="succesfullyLoggedIn">
+                        <div className="logInSuccessfullyTitle">Successfully logged In</div>
+                        <BsPersonCheckFill size={30} className='logInSuccessfullyIcon'/>
+                    </div>
+                    <div className="logInLoading">
+                        <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+                    </div>
                     <div>
                         {
                             redirectToHomePage()

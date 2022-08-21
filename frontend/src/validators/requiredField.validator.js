@@ -1,6 +1,6 @@
-const validateRequiredField = (field) => {
+const validateRequiredField = (field, minLength, errorField) => {
     const emptyInput = '';
-    const placeHolder = field.placeholder;
+    var placeHolder = field.placeholder;
     const requiredMessage = 'is required field';
 
     if(field.value == emptyInput) {
@@ -11,9 +11,22 @@ const validateRequiredField = (field) => {
       
       return false;
     } else {
+      if(field.value.length < minLength) {
+        field.parentElement.style.border = '2px solid red';
+        if(field.placeholder.includes(requiredMessage)) {
+          placeHolder = field.placeholder.replace(requiredMessage, '');
+        }
+        errorField.innerHTML = `${placeHolder} must contain minimum ${minLength} characters`;
+        errorField.color = 'red';
+        
+        return false;
+      }
       field.parentElement.style.border = '1px solid black';
       if(field.placeholder.includes(requiredMessage)) {
         field.placeholder.replace(requiredMessage, '');
+      }
+      if(errorField) {
+        errorField.innerHTML = '';
       }
 
       return true;

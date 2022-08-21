@@ -2,7 +2,7 @@ import { MdDriveFileRenameOutline, MdOutlineCategory, MdOutlineDescription } fro
 import { BiTimeFive } from 'react-icons/bi';
 import { AiOutlineFileImage } from 'react-icons/ai'
 import { fetchData } from '../services/fetch.service';
-import validateRequiredField from '../validators/validateRequiredField.validator';
+import validateRequiredField from '../validators/requiredField.validator';
 import { Autocomplete, TextField } from "@mui/material";
 import Chip from '@mui/material/Chip';
 import { useState } from "react";

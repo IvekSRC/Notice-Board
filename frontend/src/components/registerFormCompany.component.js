@@ -1,37 +1,54 @@
 import { FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
+import { BiShow } from 'react-icons/bi';
 import { fetchData } from '../services/fetch.service';
-import isMatchedPassowrd from '../validators/isMatchedPassword.validator';
-import validateRequiredField from '../validators/validateRequiredField.validator';
+import validatePassword from '../validators/password.validator';
+import validateRequiredField from '../validators/requiredField.validator';
+import validateEmail from '../validators/email.validator';
 
 const RegisterForm = () => {
   const registerCompany = async () => {
       // Collect require data
       const firstName = document.getElementById('registerFirstName');
+      const firstNameErrorField = document.getElementById('registerFirstNameErrorMessage');
       const lastName = document.getElementById('registerLastName');
+      const lastNameErrorField = document.getElementById('registerLastNameErrorMessage');
       const companyName = document.getElementById('registerCompanyName');
+      const companyNameErrorField = document.getElementById('registerCompanyNameErrorMessage');
       const email = document.getElementById('registerCompanyEmail');
+      const emailErrorField = document.getElementById('registerCompanyEmailErrorMessage');
       const password = document.getElementById('registerCompanyPassword');
+      const passwordErrorField = document.getElementById('registerPasswordErrorMessage');
       const repeatPassowrd = document.getElementById('registerCompanyRepeatPassword');
+      const repeatPasswordNameErrorField = document.getElementById('registerRepeatPasswordErrorMessage');
 
       // Validation - Required Data
       var isValid = true;
-      if(validateRequiredField(firstName) == false) {
+      if(validateRequiredField(firstName, 2, firstNameErrorField) == false) {
         isValid = false;
       }
-      if(validateRequiredField(lastName) == false) {
+      if(validateRequiredField(lastName, 2, lastNameErrorField) == false) {
         isValid = false;
       }
-      if(validateRequiredField(companyName) == false) {
+      if(validateRequiredField(companyName, 3, companyNameErrorField) == false) {
         isValid = false;
       }
       if(validateRequiredField(email) == false) {
         isValid = false;
+      } else {
+        if(validateEmail(email, emailErrorField) == false) {
+          isValid = false;
+        }
       }
-      if(validateRequiredField(password) == false) {
+      if(validateRequiredField(password, 7, passwordErrorField) == false) {
         isValid = false;
       }
-      if(validateRequiredField(repeatPassowrd) == false) {
+      if(validateRequiredField(repeatPassowrd, 7, repeatPasswordNameErrorField) == false) {
         isValid = false;
+      } else {
+        // Validation - Match Passowrd
+        if(!validatePassword(password, repeatPassowrd, repeatPasswordNameErrorField)) {
+          isValid = false;
+        }
       }
 
       var termsChecked = document.getElementById('cb1');
@@ -42,13 +59,8 @@ const RegisterForm = () => {
       } else {
         termsLabel.style.color = "black";
       }
-      
-      if(isValid == false) {
-        return;
-      }
 
-      // Validation - Match Passowrd
-      if(!isMatchedPassowrd(password, repeatPassowrd)) {
+      if(isValid == false) {
         return;
       }
 
@@ -83,6 +95,26 @@ const RegisterForm = () => {
       window.location.replace('/');
   }
 
+  const showPassword = () => {
+    var typePass = document.getElementById('registerCompanyPassword');
+    
+    if(typePass.type === 'text') {
+      typePass.type = 'password'
+    } else {
+      typePass.type = 'text';
+    }
+  }
+
+  const showRepeatPassword = () => {
+    var typePass = document.getElementById('registerCompanyRepeatPassword');
+
+    if(typePass.type === 'text') {
+      typePass.type = 'password'
+    } else {
+      typePass.type = 'text';
+    }
+  }
+
   return (
     <div className="form_wrapper">
       <div className="form_container">
@@ -95,21 +127,39 @@ const RegisterForm = () => {
               <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><FaUser className='registrationIcon'/></i></span>
                 <input type="text" name="firstName" placeholder="First Name" required id='registerFirstName' minLength={2}/>
               </div>
+              <span id='registerFirstNameErrorMessage' className='errorMessage'></span>
               <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><FaUser className='registrationIcon'/></i></span>
                 <input type="text" name="lastName" placeholder="Last Name" required id='registerLastName' minLength={2}/>
               </div>
+              <span id='registerLastNameErrorMessage' className='errorMessage'></span>
               <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><FaUser className='registrationIcon'/></i></span>
                 <input type="text" name="companyName" placeholder="Company name" required id='registerCompanyName' minLength={3}/>
               </div>
+              <span id='registerCompanyNameErrorMessage' className='errorMessage'></span>
               <div className="input_field"> <span><i aria-hidden="false" className="fa fa-envelope"><FaEnvelope className='registrationIcon'/></i></span>
                 <input type="email" name="email" placeholder="Email" required id='registerCompanyEmail' />
               </div>
-              <div className="input_field"> <span><i aria-hidden="true" className="fa fa-lock"><FaLock className='registrationIcon'/></i></span>
+              <span id='registerCompanyEmailErrorMessage' className='errorMessage'></span>
+              <div className="input_field"> 
+                <span>
+                  <i aria-hidden="true" className="fa fa-lock">
+                    <FaLock className='registrationIcon'/>
+                  </i>
+                </span>
                 <input type="password" name="password" placeholder="Password" required id='registerCompanyPassword' minLength={7}/>
+                <div className='passwordVisible' id='passVisible' onClick={showPassword}><BiShow size={25}></BiShow></div>
               </div>
-              <div className="input_field"> <span><i aria-hidden="true" className="fa fa-lock"><FaLock className='registrationIcon'/></i></span>
+              <span id='registerPasswordErrorMessage' className='errorMessage'></span>
+              <div className="input_field"> 
+                <span>
+                  <i aria-hidden="true" className="fa fa-lock">
+                    <FaLock className='registrationIcon'/>
+                  </i>
+                </span>
                 <input type="password" name="password" placeholder="Re-type Password" required id='registerCompanyRepeatPassword' minLength={7}/>
+                <div className='passwordVisible' id='repeatPassVisible' onClick={showRepeatPassword}><BiShow size={25}></BiShow></div>
               </div>
+              <span id='registerRepeatPasswordErrorMessage' className='errorMessage'></span>
               <div className="input_field radio_option">
                 <input type="radio" name="radiogroup1" id="registerGenderMale" value='Male'/>
                 <label htmlFor="registerGenderMale">Male</label>
