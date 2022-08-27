@@ -51,7 +51,7 @@ const LoginForm = () => {
     const redirectToHomePage = () => {
         setTimeout(() => {
             window.location.replace('/');
-        }, 3000000)
+        }, 2000)
     }
 
     const changeLogInVia = () => {

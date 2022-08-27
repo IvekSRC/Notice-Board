@@ -68,9 +68,12 @@ const Home = () => {
                 </div>
                 <div className="announcements">
                     {listOfAnnouncements.map((announcement) => (
-                        <div className="announcement" key={announcement._id}>
-                            <Announcement announcement={announcement}/>
-                        </div>
+                            announcement.status == true ?
+                            <div className="announcement" key={announcement._id}>
+                                <Announcement announcement={announcement}/>
+                            </div> 
+                            :
+                            <div key={announcement._id}></div>
                     ))}
                 </div>
             </div>

@@ -6,7 +6,7 @@ const deleteFile = require('./picture.service');
 
 const createAnnouncement = async (body, id) => {
     // The default end time will be one minute after the auction is created
-    const defaultEndTime = new Date(Date.now() + 1231241230000);
+    const defaultEndTime = new Date(Date.now() + 60000);
   
     let newAnnouncement = {
       name: body.name,
@@ -180,6 +180,26 @@ const isAddedToFavorites = async (userId, idAnnouncement) => {
   }
 }
 
+const extendAnnouncement = async (companyId, idAnnouncement, newTime) => {
+  const announcement = await Announcement.findById(idAnnouncement);
+  
+  if (announcement.companyId.toString() != companyId.toString()) {
+    throw new Error('You can modify just your announcement.');
+  }
+
+  if(Date.parse(newTime) < Date.now()) {
+    throw new Error("The date must be greater than today's date.");
+  }
+
+  if(announcement) {
+    announcement.endTime = newTime;
+    await announcement.save();
+    return announcement;
+  }
+
+  return null;
+}
+
 module.exports = {
     createAnnouncement,
     updateAnnouncement,
@@ -192,5 +212,6 @@ module.exports = {
     getTags,
     addToFavorites,
     removeFromFavorites,
-    isAddedToFavorites
+    isAddedToFavorites,
+    extendAnnouncement
 };

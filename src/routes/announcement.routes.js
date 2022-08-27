@@ -14,7 +14,8 @@ const {
     getTags,
     addToFavorites,
     removeFromFavorites,
-    isAddedToFavorites
+    isAddedToFavorites,
+    extendAnnouncement
 } = require('../services/announcement.service');
 const { getPaginated } = require('../services/pagination.service');
 const { Announcement } = require('../models');
@@ -294,6 +295,33 @@ router.get(
     });
 
     res.json(response);
+  }
+);
+
+// Extend time for announcement
+router.patch(
+  '/announcements/:id/extendTime',
+  authForCompany,
+  async (req, res) => {
+    const { company: { _id: companyId }, params: { id: idAnnouncement }, body: { newTime } } = req;
+    
+    try {
+      const announcement = await extendAnnouncement(companyId, idAnnouncement, newTime);
+  
+      if (!announcement) {
+        return res.status(404).json();
+      }
+  
+      res.status(200).json({
+        message: "Announcement time extended successfully.",
+        newEndTime: announcement.endTime
+      });
+    } catch (error) {
+      res.status(400).json(error.message);
+    }
+  },
+  (error, req, res) => {
+    res.status(400).json({ error: error.message });
   }
 );
 

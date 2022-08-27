@@ -134,7 +134,9 @@ li.dropdown {
   border-radius: 8px;
   padding: 0 6px;
   float: left;
-  width: 20%
+  width: 20%;
+  min-width: min-content;
+  height: 100%;
 }
 
 .announcement:hover {
@@ -144,6 +146,7 @@ li.dropdown {
 
 .announcementPicture {
   width: 100%;
+  height: 100%;
   height: auto;
 }
 
@@ -151,25 +154,36 @@ li.dropdown {
   font-weight: 500;
 }
 
-.displayPropValue {
+.displayPropValue, .displayPropValueExpire {
   font-weight: 200;
 }
 
-.seeMoreDetails {
-  text-align: center;
+.displayPropValueExpire {
+  color: rgb(185, 0, 0); 
+  padding: 7px;
 }
 
-.announcementHeader {
+.seeMoreDetails {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
   flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 2% 0% 2% 0%;
+}
+
+.announcementName {
+  text-align: center;
+  min-height: 50px;
 }
 
 .favorites {
   width: 25px;
   height: 25px;
-  margin-top: 10px;
+  margin-top: 4px;
+}
+
+.endTimeExpire {
+  color: rgb(185, 0, 0);  
 }
 
 /* Register form */
@@ -1081,4 +1095,60 @@ body {
 
 .showAnnouncementOption:hover, .showFavoritesOption:hover {
   color: white;
+}
+
+.endTimeDisplay, .expireForForm {
+  display: flex;
+  flex-direction: row;
+}
+
+.expireForForm {
+  margin-top: 3%;
+}
+
+.extendNumber {
+  width: 15%;
+  margin-right: 3%;
+  min-width: 15px;
+}
+
+.expireForLabel {
+  margin-right: 3%;
+  margin-top: 3%;
+  min-width: 80px;
+}
+
+.extendBtn {
+  min-width: 120px;
+}
+
+.expireForForm {
+  display: flex;
+  justify-content: space-between;
+}
+
+.extendEndTime {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.extendInput {
+  margin: 2% 2% 2% 2%;
+}
+
+.modalName {
+  text-align: center;
+}
+
+.modalExpireEndTime {
+  border: 2px solid rgb(185, 0, 0);
+  background-color: rgb(216, 252, 255);
+  border-radius: 10px;
+  margin-top: 3%;
+}
+
+.errorMessageExtendTime {
+  color: rgb(185, 0, 0);
+  margin: 5% 3% 3% 3%;
 }

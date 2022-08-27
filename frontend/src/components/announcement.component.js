@@ -7,7 +7,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
+import { MdFavorite, MdFavoriteBorder, MdViewArray } from 'react-icons/md';
+import SendIcon from '@mui/icons-material/Send';
 
 const Announcement = (announcement) => {
     const [picture, setPicture] = useState();
@@ -58,33 +59,59 @@ const Announcement = (announcement) => {
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 400,
-        bgcolor: 'background.paper',
+        bgcolor: '#80e8ff',
         border: '2px solid #000',
+        borderRadius: '10px',
         boxShadow: 24,
         p: 4,
     };
 
+    const isExpireInThreeDays = (expireTime) => {
+        const dateForCompare = new Date(Date.now());
+        const threeDays = 3;
+        dateForCompare.setDate(dateForCompare.getDate() + threeDays);
+
+        if(dateForCompare >= expireTime) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    const setDateType = () => {
+        const endTime = document.getElementById('extendEndTime');
+        endTime.type = 'date';
+    }
+
+    const extendEndeTime = async () => {
+        var newTime = document.getElementById('extendEndTime');
+        const errorMessage = document.getElementById('extendEndTimeErrorMessage');
+
+        if(!newTime.value) {
+            errorMessage.innerHTML = 'Please select value for new end time.';
+        } else {
+            errorMessage.innerHTML = '';
+            
+            const currentEndTime = new Date(announcement.announcement.endTime);
+            newTime = new Date(newTime.value);
+
+            if(currentEndTime >= newTime) {
+                errorMessage.innerHTML = 'Time must be greater than current end time.';
+            } else {
+                const token = localStorage.getItem('token');
+                await fetchData(`announcements/${announcement.announcement._id}/extendTime`, 'PATCH', { newTime: newTime }, token);
+                
+                window.location.replace('/');
+            }
+        }
+    }
+
     return (
         <>
-            <div className="announcementHeader">
-                <h3 className="announcementName">
+            <div className="announcementName">
+                <h3>
                     {announcement.announcement.name}
                 </h3>
-                {
-                    localStorage.getItem('loggedEntity') == 'company' && localStorage.getItem('companyId') == announcement.announcement.companyId ?
-                    <IconButton aria-label="delete" onClick={deleteAnnouncement}>
-                        <DeleteIcon />
-                    </IconButton> :
-                    <></>
-                }
-                {
-                    localStorage.getItem('loggedEntity') == 'user' && isAdded == true ?
-                    <MdFavorite className='favorites' onClick={removeFromFavorites}/> : <></>
-                }
-                {
-                    localStorage.getItem('loggedEntity') == 'user' && isAdded == false ?
-                    <MdFavoriteBorder className='favorites' onClick={addToFavorites}/> : <></>
-                }
             </div>
             {
                 <img src={picture} className="announcementPicture"/>
@@ -96,18 +123,23 @@ const Announcement = (announcement) => {
                 </span>
             </p>
             <p className="displayProp">
-                Announcement created: 
+                Created in
                 <span className="displayPropValue">
                     {` ${new Date(announcement.announcement.startTime).toDateString()}`}
                 </span>
             </p>
-            <p className="displayProp">
-                End Time: 
-                <span className="displayPropValue">
-                    {` ${new Date(announcement.announcement.endTime).toDateString()}`}
-                </span>
-            </p>
-
+            <div>
+                {
+                    isExpireInThreeDays(new Date(announcement.announcement.endTime)) == true ?
+                    <div className="endTimeExpire">
+                        Announcement expire in 3 days
+                    </div>
+                    : 
+                    <span className="displayPropValue">
+                        Expire in {` ${new Date(announcement.announcement.endTime).toDateString()}`}
+                    </span>
+                }
+            </div>
             <div className='seeMoreDetails'>
                 <Button onClick={handleOpen}>See more details</Button>
                 <Modal
@@ -117,14 +149,53 @@ const Announcement = (announcement) => {
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                    <Typography id="modal-modal-title" variant="h6" component="h2" className="modalName">
                         {announcement.announcement.name}
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        {announcement.announcement.description}
+                        Description: {announcement.announcement.description}
                     </Typography>
+                    {
+                        (localStorage.getItem('loggedEntity') == 'company' && isExpireInThreeDays(new Date(announcement.announcement.endTime))) == true ?
+                        <div className="modalExpireEndTime">
+                            <Typography className="displayPropValueExpire">
+                                Your announcement expire in {` ${new Date(announcement.announcement.endTime).toDateString()}`}
+                            </Typography>
+                            <div>
+                                <div className="extendEndTime">
+                                    <div className="extendInput"> 
+                                        <input type="text" name="extendEndTime" required id='extendEndTime' onFocus={setDateType} placeholder="Extend your announcement"/>
+                                    </div>
+                                    <div>
+                                        <Button variant="contained" endIcon={<SendIcon/>} className='extendBtn' onClick={extendEndeTime}>
+                                            Extend
+                                        </Button>
+                                    </div>
+                                </div>
+                                <div id='extendEndTimeErrorMessage' className='errorMessageExtendTime'></div>
+                            </div>
+                        </div>
+                        :
+                        <></>
+                    }
                     </Box>
                 </Modal>
+                {
+                    localStorage.getItem('loggedEntity') == 'company' && localStorage.getItem('companyId') == announcement.announcement.companyId ?
+                    <div className="deleteAnnouncement">
+                        <IconButton aria-label="delete" onClick={deleteAnnouncement}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </div> : <></>
+                }
+                {
+                    localStorage.getItem('loggedEntity') == 'user' && isAdded == true ?
+                    <MdFavorite className='favorites' onClick={removeFromFavorites}/> : <></>
+                }
+                {
+                    localStorage.getItem('loggedEntity') == 'user' && isAdded == false ?
+                    <MdFavoriteBorder className='favorites' onClick={addToFavorites}/> : <></>
+                }
             </div>
         </>
     )

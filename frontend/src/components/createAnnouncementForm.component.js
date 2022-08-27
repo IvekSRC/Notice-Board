@@ -22,13 +22,14 @@ const CreateAnnouncementForm = (tags) => {
     const createAnnouncement = async () => {
         // Collect require data
         const name = document.getElementById('createName');
+        const nameErrorField = document.getElementById('nameErrorMessage');
         const category = document.getElementById('createCategory');
         const endTime = document.getElementById('createEndTime');
         const image = document.querySelector('#createImage');
 
         // Validation - Required Data
         var isValid = true;
-        if(validateRequiredField(name) == false) {
+        if(validateRequiredField(name, 3, nameErrorField) == false) {
           isValid = false;
         }
         if(validateRequiredField(endTime) == false) {
@@ -87,6 +88,11 @@ const CreateAnnouncementForm = (tags) => {
         window.location.replace('/');
     }
 
+    const setDateType = () => {
+      const endTime = document.getElementById('createEndTime');
+      endTime.type = 'date';
+    }
+
     return (
       <div className="createAnnouncementForm">
         <div className="form_container">
@@ -99,17 +105,22 @@ const CreateAnnouncementForm = (tags) => {
                 <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><MdDriveFileRenameOutline className='registrationIcon'/></i></span>
                   <input type="text" name="name" placeholder="Name" required id='createName' minLength={3}/>
                 </div>
+                <span id='nameErrorMessage' className='errorMessage'></span>
                 <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><MdOutlineCategory className='registrationIcon'/></i></span>
                   <select id="createCategory" name="cetegory" placeholder='Category' required>
-                    <option value="Letovanje">Letovanje</option>
-                    <option value="Zimovanje">Zimovanje</option>
+                    <option value="Putovanje">Putovanje</option>
+                    <option value="Posao">Posao</option>
+                    <option value="Prodaja">Prodaja</option>
+                    <option value="Usluga">Usluga</option>
+                    <option value="Dogadjaj">Dogadjaj</option>
+                    <option value="Objava">Objava</option>
                   </select>
                 </div>
                 <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><MdOutlineDescription className='registrationIcon'/></i></span>
                   <input type="text" name="description" placeholder="Description" id='createDescription' maxLength={500}/>
                 </div>
                 <div className="input_field"> <span><i aria-hidden="false" className="fa fa-envelope"><BiTimeFive className='registrationIcon'/></i></span>
-                  <input type="date" name="endTime" required id='createEndTime' />
+                  <input type="text" name="endTime" required id='createEndTime' onFocus={setDateType} placeholder="Announcement expired date"/>
                 </div>
                 <div className="input_field createAnnouncementFileInput"> <span><i aria-hidden="false" className="fa fa-envelope"><AiOutlineFileImage className='registrationIcon'/></i></span>
                   <input type="file" name="image" required id='createImage'/>
