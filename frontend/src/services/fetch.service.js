@@ -1,4 +1,4 @@
-export const fetchData= async (title, methodType, body, token, contentType) => {
+const fetchData= async (title, methodType, body, token, contentType) => {
     const res = await fetch(`http://localhost:8080/` + title, {
         method: methodType,
         body: JSON.stringify(body),
@@ -10,4 +10,8 @@ export const fetchData= async (title, methodType, body, token, contentType) => {
     });
 
     return res;
+}
+
+module.exports = {
+    fetchData
 }

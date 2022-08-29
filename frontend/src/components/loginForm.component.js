@@ -5,7 +5,6 @@ import { BiShow } from "react-icons/bi";
 import { BsPersonCheckFill } from 'react-icons/bs';
 
 const LoginForm = () => {
-    // React States
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -36,6 +35,7 @@ const LoginForm = () => {
                 localStorage.setItem('companyId', response.company._id);
             } else {
                 localStorage.setItem('loggedEntity', 'user');
+                localStorage.setItem('userId', response.user._id);
             }
             setIsSubmitted(true);
         } else {

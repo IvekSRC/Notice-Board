@@ -11,4 +11,6 @@ const deleteFile = async (folderName, fileName) => {
     )
 }
 
-module.exports = deleteFile;
+module.exports = {
+  deleteFile
+}

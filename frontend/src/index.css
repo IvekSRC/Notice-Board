@@ -1152,3 +1152,33 @@ body {
   color: rgb(185, 0, 0);
   margin: 5% 3% 3% 3%;
 }
+
+/* Profile User */
+
+.profileUser {
+  height: 100%;
+  background-image: url('../public/images/homeBackground.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+.userProfile {
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 40%;
+  text-align: center;
+  padding: 2%; 
+  margin: auto;
+  margin-top: 5%;
+}
+
+.profileIcon {
+  margin-left: 5%;
+}
+
+.userInformation {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}

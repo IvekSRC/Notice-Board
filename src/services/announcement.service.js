@@ -6,6 +6,7 @@ const deleteFile = require('./picture.service');
 
 const createAnnouncement = async (body, id) => {
     // The default end time will be one minute after the auction is created
+    // If the announcement not exist
     const defaultEndTime = new Date(Date.now() + 60000);
   
     let newAnnouncement = {

@@ -33,4 +33,6 @@ const validateRequiredField = (field, minLength, errorField) => {
     }
 }
 
-module.exports = validateRequiredField;
+module.exports = {
+  validateRequiredField
+}

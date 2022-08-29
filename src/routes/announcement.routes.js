@@ -197,7 +197,7 @@ router.get(
 // Delete Announcement
 router.delete('/announcements/:id', authForCompany, async (req, res) => {
     const { company: { _id: companyId }, params: { id: announcementId } } = req;
-  console.log('test');
+  
     try {
       const announcement = await deleteAnnouncement(companyId, announcementId);
   

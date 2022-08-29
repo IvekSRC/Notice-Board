@@ -12,4 +12,6 @@ const validatePassword = (password, repeatPassowrd, errorField) => {
     }
 }
 
-module.exports = validatePassword;
+module.exports = {
+  validatePassword
+}

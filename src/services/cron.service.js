@@ -1,4 +1,4 @@
-const { Company, User, Announcement } = require('../models/index');
+const { Announcement } = require('../models/index');
 var CronJob = require('cron').CronJob;
 
 var expiresAnnouncement = async (announcementId, endTime) => {
@@ -15,4 +15,6 @@ var expiresAnnouncement = async (announcementId, endTime) => {
     job.start();
 }
 
-module.exports = expiresAnnouncement;
+module.exports = {
+    expiresAnnouncement
+}

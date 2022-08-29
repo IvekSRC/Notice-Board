@@ -1,5 +1,6 @@
 import { AiFillHome } from 'react-icons/ai';
 import { BiLogIn, BiLogOutCircle, BiRegistered } from 'react-icons/bi';
+import { CgProfile } from 'react-icons/cg';
 import { isLogged, logOut } from '../services/auth.services';
 
 const NavigationBar = () => {
@@ -14,12 +15,26 @@ const NavigationBar = () => {
         </li>
         {
           isLogged() == true ? 
-          <li className="dropdown">
-            <a href="/" onClick={logOut}>
-              Logout
-              <BiLogOutCircle className='navBarIcon'/>
-            </a>
-          </li>
+          <ul>
+            <li className="dropdown">
+              <a href="/" onClick={logOut}>
+                Logout
+                <BiLogOutCircle className='navBarIcon'/>
+              </a>
+            </li>
+            <li className="dropdown">
+              <a 
+                href=
+                {
+                  localStorage.getItem('loggedEntity') == 'user' ?
+                  'profileUser' : 'profileCompany'
+                }
+              >
+                Profile
+                <CgProfile className='navBarIcon'/>
+              </a>
+            </li>
+          </ul>
           :
           <>
             <li className="dropdown registerDropDown">

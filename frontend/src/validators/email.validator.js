@@ -16,4 +16,6 @@ const validateEmail = (email, errorField) => {
     }
 }
 
-module.exports = validateEmail;
+module.exports = {
+    validateEmail
+}

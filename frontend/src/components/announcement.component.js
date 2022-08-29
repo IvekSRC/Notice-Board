@@ -7,13 +7,19 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { MdFavorite, MdFavoriteBorder, MdViewArray } from 'react-icons/md';
+import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
 import SendIcon from '@mui/icons-material/Send';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const Announcement = (announcement) => {
     const [picture, setPicture] = useState();
     const [open, setOpen] = React.useState(false);
     const [isAdded, setIsAdded] = useState(false);
+    const [deleteModal, setDeleteModal] = React.useState(false);
 
     useEffect(() => {
         const getApiData = async () => {
@@ -40,6 +46,8 @@ const Announcement = (announcement) => {
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const handleClickOpen = () => { setDeleteModal(true); };
+    const handleClickClose = () => { setDeleteModal(false); };
 
     const addToFavorites = async () => {
         const token = localStorage.getItem('token');
@@ -183,9 +191,30 @@ const Announcement = (announcement) => {
                 {
                     localStorage.getItem('loggedEntity') == 'company' && localStorage.getItem('companyId') == announcement.announcement.companyId ?
                     <div className="deleteAnnouncement">
-                        <IconButton aria-label="delete" onClick={deleteAnnouncement}>
+                        <IconButton aria-label="delete" onClick={handleClickOpen}>
                             <DeleteIcon />
                         </IconButton>
+                        <Dialog
+                            open={deleteModal}
+                            onClose={handleClickClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                            {"Confirm delete modal"}
+                            </DialogTitle>
+                            <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure you want to delete this announcement
+                            </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                            <Button onClick={handleClickClose}>Cancel</Button>
+                            <Button onClick={deleteAnnouncement} autoFocus>
+                                Confirm
+                            </Button>
+                            </DialogActions>
+                        </Dialog>
                     </div> : <></>
                 }
                 {
