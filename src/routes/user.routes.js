@@ -6,7 +6,8 @@ const {
     updateUser,
     deleteUser,
     addProfilePicture,
-    deleteProfilePicture
+    deleteProfilePicture,
+    confirmUserPassword
 } = require('../services/user.service');
 const { PROFILE_PICTURE } = require('../constants/folderNames.constants');
 const upload = require('../middlewares/upload.middleware');
@@ -140,6 +141,39 @@ router.delete(
     try {
       await deleteProfilePicture(id, PROFILE_PICTURE);
       res.json('Profile picture deleted succesfully.');
+    }
+    catch (error) {
+      res.status(404).json(error.message);
+    }
+  }
+);
+
+// Confirm User Password
+router.get(
+  '/users/confirmPassword/:password',
+  authForUser,
+  async (req, res) => {
+    const { user: { email }, params: { password } } = req;
+
+    try {
+      var response = {
+        message: String,
+        isValid: Boolean
+      }
+
+      const isValid = await confirmUserPassword(email, password);
+
+      if(isValid == true) {
+        response.message = "Succesfully";
+        response.isValid = true;
+
+        res.json(response);
+      } else {
+        response.message = "Password do not match";
+        response.isValid = false;
+
+        res.json(response);
+      }
     }
     catch (error) {
       res.status(404).json(error.message);

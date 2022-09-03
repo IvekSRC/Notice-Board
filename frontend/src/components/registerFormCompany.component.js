@@ -1,9 +1,9 @@
 import { FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
 import { BiShow } from 'react-icons/bi';
 import { fetchData } from '../services/fetch.service';
-import validatePassword from '../validators/password.validator';
-import validateRequiredField from '../validators/requiredField.validator';
-import validateEmail from '../validators/email.validator';
+import { validatePassword } from '../validators/password.validator';
+import { validateRequiredField } from '../validators/requiredField.validator';
+import { validateEmail } from '../validators/email.validator';
 
 const RegisterForm = () => {
   const registerCompany = async () => {

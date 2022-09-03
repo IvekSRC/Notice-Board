@@ -1,9 +1,9 @@
 import { FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
 import { fetchData } from '../services/fetch.service';
 import { BiShow } from 'react-icons/bi';
-import validatePassword from '../validators/password.validator';
-import validateRequiredField from '../validators/requiredField.validator';
-import validateEmail from '../validators/email.validator';
+import { validatePassword } from '../validators/password.validator';
+import { validateRequiredField } from '../validators/requiredField.validator';
+import { validateEmail } from '../validators/email.validator';
 
 const RegisterForm = () => {
     const registerUser = async () => {
@@ -123,7 +123,12 @@ const RegisterForm = () => {
         <div className="row clearfixx">
           <div className='registerUserForm'>
             <form className='registerUserForm'>
-              <div className="input_field"> <span><i aria-hidden="true" className="fa fa-user"><FaUser className='registrationIcon'/></i></span>
+              <div className="input_field"> 
+                <span>
+                  <i aria-hidden="true" className="fa fa-user">
+                    <FaUser className='registrationIcon'/>
+                  </i>
+                </span>
                 <input type="text" name="firstName" placeholder="First Name" required id='registerFirstName' minLength={2}/>
               </div>
               <span id='registerFirstNameErrorMessage' className='errorMessage'></span>

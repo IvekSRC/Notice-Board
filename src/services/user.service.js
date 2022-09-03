@@ -2,6 +2,7 @@ const { User } = require('../models');
 const { userUpdateSchema } = require('../validators/index');
 const { PROFILE_PICTURE } = require('../constants/folderNames.constants');
 const deleteFile = require('./picture.service');
+const bcrypt = require('bcrypt');
 
 const getUsers =  async () => {
     return await User.find({});
@@ -68,11 +69,29 @@ const deleteProfilePicture = async (id, profilePicture) => {
     }
 }
 
+const confirmUserPassword = async (email, passwordForTest) => {
+  const user = await User.findOne({ email: email }).select("password");
+  
+  if (!user) {
+    throw new Error("Can't found.");
+  }
+  else {
+    const isMatch = await bcrypt.compare(passwordForTest, user.password);
+
+    if (!isMatch) {
+      return false;
+    }
+
+    return true;
+  }
+}
+
 module.exports = {
     getUsers,
     getUser,
     updateUser,
     deleteUser,
     addProfilePicture,
-    deleteProfilePicture
+    deleteProfilePicture,
+    confirmUserPassword
 };

@@ -4,7 +4,7 @@ const validateRequiredField = (field, minLength, errorField) => {
     const requiredMessage = 'is required field';
 
     if(field.value == emptyInput) {
-      field.parentElement.style.border = '2px solid red';
+      field.style.border = '2px solid red';
       if(!field.placeholder.includes(requiredMessage)) {
         field.placeholder = `${placeHolder} ${requiredMessage}`
       }
@@ -12,7 +12,7 @@ const validateRequiredField = (field, minLength, errorField) => {
       return false;
     } else {
       if(field.value.length < minLength) {
-        field.parentElement.style.border = '2px solid red';
+        field.style.border = '2px solid red';
         if(field.placeholder.includes(requiredMessage)) {
           placeHolder = field.placeholder.replace(requiredMessage, '');
         }
@@ -21,7 +21,7 @@ const validateRequiredField = (field, minLength, errorField) => {
         
         return false;
       }
-      field.parentElement.style.border = '1px solid black';
+      field.style.border = '1px solid black';
       if(field.placeholder.includes(requiredMessage)) {
         field.placeholder.replace(requiredMessage, '');
       }

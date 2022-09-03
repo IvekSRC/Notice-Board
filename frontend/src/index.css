@@ -1166,19 +1166,51 @@ body {
 .userProfile {
   border: 2px solid black;
   border-radius: 10px;
-  width: 40%;
+  width: 35%;
   text-align: center;
   padding: 2%; 
   margin: auto;
-  margin-top: 5%;
+  margin-top: 2%;
 }
 
 .profileIcon {
   margin-left: 5%;
 }
 
-.userInformation {
+.userInformation, .renderUserInformation {
   display: flex;
   flex-direction: column;
-  text-align: left;
+}
+
+.editUserPart {
+	margin-top: 10px;
+	font-family: verdana;
+	font-size: 12px;
+}
+
+.fl {
+	float: left;
+  margin-top: 0.7%;
+  width: 15%;
+}
+
+.inputEditFieldUser {
+  width: 80%;
+  margin-bottom: 1%;
+}
+
+.confirmPasswordUserPage {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.confirmPasswordUserPageLabel {
+  float: left;
+  margin-top: 0.8%;
+  width: 20%;
+}
+
+.confirmPasswordUserPageVisibleBtn {
+  margin-left: 2%;
 }
