@@ -18,12 +18,12 @@ const Home = () => {
     const [favorites, setFavorites] = useState([]);
     const [tags, setTags] = useState([]);
     const [searchByTags, setSearchByTags] = useState([]);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [numberOfAnnouncements, setNumberOfAnnouncements] = React.useState(0);
-    const [isExpanded, setIsExpanded] = React.useState(true);
-    const [sortBy, setSortBy] = React.useState('_id');
-    const [sortOrder, setSortOrder] = React.useState(1);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [numberOfAnnouncements, setNumberOfAnnouncements] = useState(0);
+    const [isExpanded, setIsExpanded] = useState(true);
+    const [sortBy, setSortBy] = useState('_id');
+    const [sortOrder, setSortOrder] = useState(1);
     const [displayOption, setDisplayOption] = useState(1);
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const Home = () => {
                     setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
                 } else if (loggedEntity() == 'user') {
                     const token = localStorage.getItem('token');
-                    fetchAnnouncements = await (await fetchData('announcements/favorites/all', 'GET', undefined, token)).json();
+                    fetchAnnouncements = await (await fetchData(`announcements/favorites/all${sortCriterium}`, 'GET', undefined, token)).json();
                     setFavorites(fetchAnnouncements.Items);
                     setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
                 }

@@ -1,7 +1,4 @@
 import { CgProfile } from 'react-icons/cg';
-import { AiFillEdit } from 'react-icons/ai';
-import { MdCancel } from 'react-icons/md';
-import { GiConfirmed } from 'react-icons/gi'
 import { useEffect, useState } from 'react';
 import { validateRequiredField } from '../validators/requiredField.validator';
 import { fetchData } from '../services/fetch.service';
@@ -13,72 +10,53 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { BiShow } from 'react-icons/bi';
+import Checkbox from '@mui/material/Checkbox';
 
 const UserProfile = (user) => {
-    const [open, setOpen] = useState(false);
+    const [activeStep, setActiveStep] = useState(0);
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     const steps = ['Step 1', 'Step 2', 'Step 3'];
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set());
+
+    const [firstName, setFirstName] = useState(user.user.firstName);
+    const [lastName, setLastName] = useState(user.user.lastName);
+    const [nickName, setNickName] = useState(user.user.nickName);
+    const [gender, setGender] = useState(user.user.gender);
+    const [country, setCountry] = useState(user.user.country);
+
+    useEffect(() => { }, []);
 
     const isStepOptional = (step) => {
         return step === 1;
-      };
+    };
     
-      const isStepSkipped = (step) => {
-        return skipped.has(step);
-      };
-    
-      const handleNext = async () => {
+    const handleNext = async () => {
         if(activeStep == 0 && isValidChanges() == false) {
             return;
         }
-        if(activeStep == 1) {
-            const isValidPw = await isValidPassword();
-            if(!isValidPw) {
-                return;
-            }
-        }
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-          newSkipped = new Set(newSkipped.values());
-          newSkipped.delete(activeStep);
-        }
-    
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
-      };
-    
-      const handleBack = () => {
-        if(activeStep == 0) {
-            handleClose();
+
+        if(activeStep == 1 && await isValidPassword() == false) {
             return;
         }
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-      };
-    
-      const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-          // You probably want to guard against something like this,
-          // it should never occur unless someone's actively trying to break something.
-          throw new Error("You can't skip a step that isn't optional.");
+
+        if(activeStep == 2) {
+            const isChecked = isConfirmedUpdate();
+            if(!isChecked) {
+                return;
+            } else {
+                await editUserInformation();
+            }
         }
-    
+
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped((prevSkipped) => {
-          const newSkipped = new Set(prevSkipped.values());
-          newSkipped.add(activeStep);
-          return newSkipped;
-        });
-      };
+    };
     
-      const handleReset = () => {
-        setActiveStep(0);
-      };
-
-    useEffect(() => { }, [open]);
-
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+    
+    const handleRefresh = () => {
+        window.location.replace('/profileUser');
+    };
 
     const isValidChanges = () => {
         const firstName = document.getElementById('editFirstName');
@@ -97,6 +75,26 @@ const UserProfile = (user) => {
         }
         if(validateRequiredField(nickName, 3, nickNameErrorField) == false) {
             isValid = false;
+        }
+
+        if(isValid == true) {
+            setFirstName(firstName.value);
+            setLastName(lastName.value);
+            setNickName(nickName.value);
+
+            var gender = undefined;
+            if(document.getElementById('genderMale').checked) {
+                gender = document.getElementById('genderMale').value;
+            } else if (document.getElementById('genderFemale').checked) {
+                gender = document.getElementById('genderFemale').value;
+            }
+            setGender(gender);
+
+            var country = document.getElementById('editCountry').value;
+            if(country == 'Select country') {
+                country = undefined;
+            }
+            setCountry(country);
         }
 
         return isValid;
@@ -131,75 +129,33 @@ const UserProfile = (user) => {
         }
     }
 
+    const isConfirmedUpdate = () => {
+        const isChecked = document.getElementById('confirmUpdateBtn').checked;
+        const errorMessage = document.getElementById('confirmUpdateErrorMessage');
+
+        if(!isChecked) {
+            errorMessage.innerHTML = 'You need to confirm your update';
+            errorMessage.style.color = 'red';
+
+            return false;
+        } else {
+            errorMessage.innerHTML = '';
+
+            return true;
+        }
+    }
+
     const editUserInformation = async () => {
-        const firstName = document.getElementById('editFirstName');
-        const firstNameErrorField = document.getElementById('editFirstNameErrorMessage');
-        const lastName = document.getElementById('editLastName');
-        const lastNameErrorField = document.getElementById('editLastNameErrorMessage');
-        const nickName = document.getElementById('editNickName');
-        const nickNameErrorField = document.getElementById('editNickNameErrorMessage');
-
-        var gender = undefined;
-        if(document.getElementById('genderMale').checked) {
-          gender = document.getElementById('genderMale').value;
-        } else if (document.getElementById('genderFemale').checked) {
-          gender = document.getElementById('genderFemale').value;
-        }
-
-        var country = document.getElementById('editCountry').value;
-        if(country == 'Select country') {
-          country = undefined;
-        }
-
         const updatedUser = {
-            firstName: firstName.value,
-            lastName: lastName.value,
-            nickName: nickName.value,
+            firstName: firstName,
+            lastName: lastName,
+            nickName: nickName,
             gender: gender,
             country: country
         }
         
         const token = localStorage.getItem('token');
         await fetchData('users', 'PATCH', updatedUser, token);
-        
-        window.location.replace('/profileUser');
-    }
-
-    const renderUserInformation = () => {
-        return (
-            <div className='renderUserInformation'>
-                <span>
-                    <span>
-                        First Name: 
-                    </span>
-                    {user.user.firstName}
-                </span>
-                <span>
-                    <span>
-                        Last Name: 
-                    </span>
-                    {user.user.lastName}
-                </span>
-                <span>
-                    <span>
-                        Nick Name: 
-                    </span>
-                    {user.user.nickName}
-                </span>
-                <span>
-                    <span>
-                        Gender: 
-                    </span>
-                    {user.user.gender}
-                </span>
-                <span>
-                    <span>
-                        Country:
-                    </span>
-                    {user.user.country}
-                </span>
-            </div>
-        )
     }
 
     const showPassword = () => {
@@ -210,7 +166,7 @@ const UserProfile = (user) => {
         } else {
           typePass.type = 'text';
         }
-      }
+    }
 
     const renderConfirmPassword = () => {
         return (
@@ -231,10 +187,35 @@ const UserProfile = (user) => {
         )
     }
 
+    const changeFirstName = (event) => {
+        setFirstName(event.target.value);
+        user.user.firstName = event.target.value;
+    }
+
+    const changeLastName = (event) => {
+        setLastName(event.target.value);
+        user.user.lastName = event.target.value;
+    }
+
+    const changeNickName = (event) => {
+        setNickName(event.target.value);
+        user.user.nickName = event.target.value;
+    }
+
+    const changeGender = (event) => {
+        setGender(event.target.value);
+        user.user.gender = event.target.value;
+    }
+
+    const changeCountry = (event) => {
+        setCountry(event.target.value);
+        user.user.country = event.target.value;
+    }
+
     const renderEditUserInformation = () => {
         return (
             <div className="editUserInformation">
-
+                
                 <div className="editUserPart">
                     <label className="fl"> 
                         First Name: 
@@ -243,7 +224,7 @@ const UserProfile = (user) => {
                         <i className="fa fa-user" aria-hidden="true"></i>
                     </div>
                     <div className="fr">
-                        <input type="text" name="firstName" className='inputEditFieldUser' placeholder="First Name" defaultValue={user.user.firstName} id='editFirstName' minLength={2}/>
+                        <input type="text" name="firstName" className='inputEditFieldUser' placeholder="First Name" value={user.user.firstName || ''} onChange={changeFirstName} id='editFirstName' minLength={2}/>
                     </div> 
                     <span id='editFirstNameErrorMessage' className='errorMessage'></span>
                     <div className="clr"></div>
@@ -257,7 +238,7 @@ const UserProfile = (user) => {
                         <i className="fa fa-user" aria-hidden="true"></i>
                     </div>
                     <div className="fr">
-                        <input type="text" name="lastName" className='inputEditFieldUser' placeholder="Last Name" defaultValue={user.user.lastName} id='editLastName' minLength={2}/>
+                        <input type="text" name="lastName" className='inputEditFieldUser' placeholder="Last Name" value={user.user.lastName || ''} onChange={changeLastName} id='editLastName' minLength={2}/>
                     </div> 
                     <span id='editLastNameErrorMessage' className='errorMessage'></span>
                     <div className="clr"></div>
@@ -271,7 +252,7 @@ const UserProfile = (user) => {
                         <i className="fa fa-user" aria-hidden="true"></i>
                     </div>
                     <div className="fr">
-                        <input type="text" name="nickName" className='inputEditFieldUser' placeholder="Nick Name" defaultValue={user.user.nickName} id='editNickName' minLength={3}/>
+                        <input type="text" name="nickName" className='inputEditFieldUser' placeholder="Nick Name" value={user.user.nickName || ''} onChange={changeNickName} id='editNickName' minLength={3}/>
                     </div> 
                     <span id='editNickNameErrorMessage' className='errorMessage'></span>
                     <div className="clr"></div>
@@ -279,17 +260,19 @@ const UserProfile = (user) => {
 
                 <div className="editUserPart editUserGender">
                     <input type="radio" name="Gender" value="Male" id='genderMale' 
-                        defaultChecked={user.user.gender == 'Male' ? 'checked' : ''}
+                        checked={user.user.gender == 'Male' ? 'checked' : ''}
+                        onChange={changeGender}
                     />
                     <label htmlFor="genderMale">Male</label>
                     <input type="radio" name="Gender" value="Female" id='genderFemale'
-                        defaultChecked={user.user.gender == 'Female' ? 'checked' : ''}
+                        checked={user.user.gender == 'Female' ? 'checked' : ''}
+                        onChange={changeGender}
                     />
                     <label htmlFor="genderFemale">Female</label>
                 </div>
 
                 <div className="input_field select_option">
-                  <select id="editCountry" name="country" defaultValue={user.user.country}>
+                  <select id="editCountry" name="country" value={user.user.country} onChange={changeCountry}>
                     <option>Select country</option>
                     <option>Afghanistan</option>
                     <option>Aland Islands</option>
@@ -550,7 +533,7 @@ const UserProfile = (user) => {
     }
 
     const renderEditStepper = () => {
-        const stepsDescription = ['Edit your information', 'Confirm your password', 'Are you sure you want to edit information ?'];
+        const stepsDescription = ['Edit your information', 'Confirm your password', ''];
 
         return (
             <Box sx={{ width: '100%' }}>
@@ -563,9 +546,6 @@ const UserProfile = (user) => {
                     <Typography variant="caption"></Typography>
                     );
                 }
-                if (isStepSkipped(index)) {
-                    stepProps.completed = false;
-                }
                 return (
                     <Step key={label} {...stepProps}>
                     <StepLabel {...labelProps}>{label}</StepLabel>
@@ -576,11 +556,11 @@ const UserProfile = (user) => {
             {activeStep === steps.length ? (
                 <React.Fragment>
                 <Typography sx={{ mt: 2, mb: 1 }}>
-                    All steps completed - you&apos;re finished
+                    All steps completed - successfully updated
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                     <Box sx={{ flex: '1 1 auto' }} />
-                    <Button onClick={handleReset}>Reset</Button>
+                    <Button onClick={handleRefresh}>Profile</Button>
                 </Box>
                 </React.Fragment>
             ) : (
@@ -590,14 +570,20 @@ const UserProfile = (user) => {
                 </Typography>
                 {activeStep == 0 ? renderEditUserInformation() : <></>}
                 {activeStep == 1 ? renderConfirmPassword() : <></>}
+                {activeStep == 2 ? renderConfirmUpdate() : <></>}
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                    <Button
-                    color="inherit"
-                    onClick={handleBack}
-                    sx={{ mr: 1 }}
-                    >
-                    Back
-                    </Button>
+                    {
+                        activeStep != 0 ?
+                        <Button
+                            color="inherit"
+                            onClick={handleBack}
+                            sx={{ mr: 1 }}
+                        >
+                            Back
+                        </Button> 
+                        :
+                        <></>
+                    }
                     <Box sx={{ flex: '1 1 auto' }} />
         
                     <Button onClick={async () => {await handleNext()}}>
@@ -610,6 +596,20 @@ const UserProfile = (user) => {
         );
     }
 
+    const renderConfirmUpdate = () => {
+        return (
+            <div className='renderConfirmUpdate'>
+                <div className='renderConfirmUpdateLabel'>
+                    Are you sure you want to edit information ?
+                </div>
+                <div>
+                    <Checkbox {...label} id='confirmUpdateBtn'/>
+                </div>
+                <span id='confirmUpdateErrorMessage' className='errorMessage'></span>
+            </div>
+        )
+    }
+
     return (
         <div className="userProfile">
             <h1>
@@ -618,17 +618,7 @@ const UserProfile = (user) => {
             </h1>
             <div className='userInformation'>
                 {
-                    open == true ?
-                    <div>
-                        {renderEditStepper()}
-                        {/* <MdCancel className='favorites' onClick={handleClose}/>
-                        <GiConfirmed className='favorites' onClick={editUserInformation}/> */}
-                    </div>
-                    :
-                    <div>
-                        {renderUserInformation()}
-                        <AiFillEdit className='favorites' onClick={handleOpen}/>
-                    </div>
+                    renderEditStepper()
                 }
             </div>
         </div>

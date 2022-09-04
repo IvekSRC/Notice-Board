@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import NavigationBar from "../components/navigationBar.component";
 import UserProfile from "../components/profileUser.component";
+import UserFavoritesAnnouncements from "../components/userFavoritesAnnouncements.component";
 import { fetchData } from "../services/fetch.service";
 
 const ProfileUser = () => {
@@ -31,6 +32,7 @@ const ProfileUser = () => {
       <div className="profileUser">
         <NavigationBar/>
         <UserProfile user={loggedEntity}/>
+        <UserFavoritesAnnouncements user={loggedEntity}/>
       </div>
     </>
   )

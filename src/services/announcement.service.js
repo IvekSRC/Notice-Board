@@ -1,5 +1,5 @@
 const { Announcement } = require('../models');
-const expiresAnnouncement = require('./cron.service');
+const { expiresAnnouncement } = require('./cron.service');
 const { announcementUpdateSchema } = require('../validators');
 const { PICTURE } = require('../constants/folderNames.constants');
 const deleteFile = require('./picture.service');

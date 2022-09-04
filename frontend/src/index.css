@@ -1214,3 +1214,20 @@ body {
 .confirmPasswordUserPageVisibleBtn {
   margin-left: 2%;
 }
+
+.renderConfirmUpdate {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.renderConfirmUpdateLabel {
+  margin-top: 1.9%;
+}
+
+.userProfileDisplayProp {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
