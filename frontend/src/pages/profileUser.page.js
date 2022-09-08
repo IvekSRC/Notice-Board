@@ -31,7 +31,7 @@ const ProfileUser = () => {
     <>
       <div className="profileUser">
         <NavigationBar/>
-        <UserProfile user={loggedEntity}/>
+        <UserProfile user={loggedEntity} originalUser={loggedEntity}/>
         <UserFavoritesAnnouncements user={loggedEntity}/>
       </div>
     </>

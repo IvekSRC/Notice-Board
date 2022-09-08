@@ -19,6 +19,9 @@ const {
 } = require('../services/announcement.service');
 const { getPaginated } = require('../services/pagination.service');
 const { Announcement } = require('../models');
+const sharp = require('sharp');
+const path = require('path');
+const fs = require('fs');
 
 // Create Announcement
 router.post('/announcements', authForCompany, async (req, res) => {
@@ -218,9 +221,18 @@ router.post(
   upload.single(PICTURE),
   async (req, res) => {
     const { company: { _id: companyId }, params: { id: idAnnouncement }, generatedFileName } = req;
+    const { filename: image } = req.file;
     
     try {
       const announcement = await addPicture(companyId, idAnnouncement, generatedFileName);
+
+      await sharp(req.file.path)
+        .resize(975, 600)
+        .jpeg({ quality: 90 })
+        .toFile(
+            path.resolve(req.file.destination, PICTURE, image)
+        )
+        fs.unlinkSync(req.file.path)
   
       if (!announcement) {
         return res.status(404).json();

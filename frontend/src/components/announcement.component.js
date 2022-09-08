@@ -122,7 +122,9 @@ const Announcement = (announcement) => {
                 </h3>
             </div>
             {
-                <img src={picture} className="announcementPicture"/>
+                <div className="divForImage">
+                    <img src={picture} className="announcementPicture"/>
+                </div>
             }
             <p className="displayProp">
                 Category:  
@@ -140,7 +142,7 @@ const Announcement = (announcement) => {
                 {
                     isExpireInThreeDays(new Date(announcement.announcement.endTime)) == true ?
                     <div className="endTimeExpire">
-                        Announcement expire in 3 days
+                        Expire in 3 days
                     </div>
                     : 
                     <span className="displayPropValue">

@@ -129,12 +129,12 @@ li.dropdown {
 }
 
 .announcement {
-  margin: 2% 1.8% 1% 1.8%;
+  margin: 2% 2% 1% 1.8%;
   border: 2px solid #01BCE7;
   border-radius: 8px;
   padding: 0 6px;
   float: left;
-  width: 20%;
+  width: 15%;
   min-width: min-content;
   height: 100%;
 }
@@ -144,10 +144,12 @@ li.dropdown {
   background-color: #78b2ff;
 }
 
+.divForImage {
+  text-align: center;
+}
+
 .announcementPicture {
   width: 100%;
-  height: 100%;
-  height: auto;
 }
 
 .displayProp {

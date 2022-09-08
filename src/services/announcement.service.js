@@ -2,7 +2,7 @@ const { Announcement } = require('../models');
 const { expiresAnnouncement } = require('./cron.service');
 const { announcementUpdateSchema } = require('../validators');
 const { PICTURE } = require('../constants/folderNames.constants');
-const deleteFile = require('./picture.service');
+const { deleteFile } = require('./picture.service');
 
 const createAnnouncement = async (body, id) => {
     // The default end time will be one minute after the auction is created
