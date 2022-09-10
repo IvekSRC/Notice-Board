@@ -24,7 +24,7 @@ const Home = () => {
     const [isExpanded, setIsExpanded] = useState(true);
     const [sortBy, setSortBy] = useState('_id');
     const [sortOrder, setSortOrder] = useState(1);
-    const [displayOption, setDisplayOption] = useState(1);
+    const [displayOption, setDisplayOption] = useState(-1);
 
     useEffect(() => {
         const getApiData = async () => {
@@ -45,7 +45,7 @@ const Home = () => {
                     fetchAnnouncements = await (await fetchData(`announcements/all/me${sortCriterium}`, 'GET', undefined, token)).json();
                     setMyAnnouncements(fetchAnnouncements.Items);
                     setNumberOfAnnouncements(fetchAnnouncements.TotalPages);
-                } else if (loggedEntity() == 'user') {
+                } else if (loggedEntity() == 'user' && displayOption == 1) {
                     const token = localStorage.getItem('token');
                     fetchAnnouncements = await (await fetchData(`announcements/favorites/all${sortCriterium}`, 'GET', undefined, token)).json();
                     setFavorites(fetchAnnouncements.Items);
@@ -141,9 +141,9 @@ const Home = () => {
                     <Button onClick={changeDisplayAnnouncements} className='displayAllAnnouncements'>
                         {
                             displayOption == 1 ?
-                            <span className="showFavoritesOption">Favorites</span>
-                            :
                             <span className="showFavoritesOption">Show all Announcements</span>
+                            :
+                            <span className="showFavoritesOption">Favorites</span>
                         }
                     </Button> : <></>
                 }
@@ -238,7 +238,7 @@ const Home = () => {
                     {
                         loggedEntity() == 'user' ?
                             displayOption == 1 ?
-                            renderAnnouncements(announcements) : renderAnnouncements(favorites)
+                            renderAnnouncements(favorites) : renderAnnouncements(announcements)
                         :
                             displayOption == 1 ? renderCompanyAnnouncements(myAnnouncements) : renderCompanyAnnouncements(announcements)
                     }
