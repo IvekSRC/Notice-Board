@@ -145,9 +145,9 @@ const Announcement = (announcement) => {
                         Expire in 3 days
                     </div>
                     : 
-                    <span className="displayPropValue">
+                    <div className="displayPropValue">
                         Expire in {` ${new Date(announcement.announcement.endTime).toDateString()}`}
-                    </span>
+                    </div>
                 }
             </div>
             <div className='seeMoreDetails'>
@@ -192,7 +192,7 @@ const Announcement = (announcement) => {
                 </Modal>
                 {
                     localStorage.getItem('loggedEntity') == 'company' && localStorage.getItem('companyId') == announcement.announcement.companyId ?
-                    <div className="deleteAnnouncement">
+                    <div>
                         <IconButton aria-label="delete" onClick={handleClickOpen}>
                             <DeleteIcon />
                         </IconButton>

@@ -12,16 +12,16 @@ import Typography from '@mui/material/Typography';
 import { BiShow } from 'react-icons/bi';
 import Checkbox from '@mui/material/Checkbox';
 
-const UserProfile = (user) => {
+const CompanyProfile = (company) => {
     const [activeStep, setActiveStep] = useState(0);
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     const steps = ['Step 1', 'Step 2', 'Step 3'];
 
-    const [firstName, setFirstName] = useState(user.user.firstName);
-    const [lastName, setLastName] = useState(user.user.lastName);
-    const [nickName, setNickName] = useState(user.user.nickName);
-    const [gender, setGender] = useState(user.user.gender);
-    const [country, setCountry] = useState(user.user.country);
+    const [firstName, setFirstName] = useState(company.company.firstName);
+    const [lastName, setLastName] = useState(company.company.lastName);
+    const [name, setName] = useState(company.company.name);
+    const [gender, setGender] = useState(company.company.gender);
+    const [country, setCountry] = useState(company.company.country);
 
     useEffect(() => { }, []);
 
@@ -43,7 +43,7 @@ const UserProfile = (user) => {
             if(!isChecked) {
                 return;
             } else {
-                await editUserInformation();
+                await editCompanyInformation();
             }
         }
 
@@ -55,7 +55,7 @@ const UserProfile = (user) => {
     };
     
     const handleRefresh = () => {
-        window.location.replace('/profileUser');
+        window.location.replace('/profileCompany');
     };
 
     const isValidChanges = () => {
@@ -63,8 +63,8 @@ const UserProfile = (user) => {
         const firstNameErrorField = document.getElementById('editFirstNameErrorMessage');
         const lastName = document.getElementById('editLastName');
         const lastNameErrorField = document.getElementById('editLastNameErrorMessage');
-        const nickName = document.getElementById('editNickName');
-        const nickNameErrorField = document.getElementById('editNickNameErrorMessage');
+        const name = document.getElementById('editName');
+        const nameErrorField = document.getElementById('editNameErrorMessage');
 
         var isValid = true;
         if(validateRequiredField(firstName, 2, firstNameErrorField) == false) {
@@ -73,14 +73,14 @@ const UserProfile = (user) => {
         if(validateRequiredField(lastName, 2, lastNameErrorField) == false) {
             isValid = false;
         }
-        if(validateRequiredField(nickName, 3, nickNameErrorField) == false) {
+        if(validateRequiredField(name, 3, nameErrorField) == false) {
             isValid = false;
         }
 
         if(isValid == true) {
             setFirstName(firstName.value);
             setLastName(lastName.value);
-            setNickName(nickName.value);
+            setName(name.value);
 
             var gender = undefined;
             if(document.getElementById('genderMale').checked) {
@@ -113,7 +113,7 @@ const UserProfile = (user) => {
         }
 
         const token = localStorage.getItem('token');
-        const response = await (await fetchData(`users/confirmPassword/${password.value}`, 'GET', undefined, token)).json();
+        const response = await (await fetchData(`companys/confirmPassword/${password.value}`, 'GET', undefined, token)).json();
         
         if(!response.isValid) {
             password.style.border = '2px solid red';
@@ -145,17 +145,17 @@ const UserProfile = (user) => {
         }
     }
 
-    const editUserInformation = async () => {
-        const updatedUser = {
+    const editCompanyInformation = async () => {
+        const updatedCompany = {
             firstName: firstName,
             lastName: lastName,
-            nickName: nickName,
+            name: name,
             gender: gender,
             country: country
         }
         
         const token = localStorage.getItem('token');
-        await fetchData('users', 'PATCH', updatedUser, token);
+        await fetchData('companys', 'PATCH', updatedCompany, token);
     }
 
     const showPassword = () => {
@@ -170,16 +170,16 @@ const UserProfile = (user) => {
 
     const renderConfirmPassword = () => {
         return (
-            <div className="editUserPart">
-                <label className="confirmPasswordUserPageLabel"> 
+            <div className="editCompanyPart">
+                <label className="confirmPasswordCompanyPageLabel"> 
                     Password
                 </label>
                 <div className="new iconBox">
                     <i className="fa fa-user" aria-hidden="true"></i>
                 </div>
-                <div className='confirmPasswordUserPage'>
-                    <input type="password" className='inputEditFieldUser' name="password" placeholder="Password" required id='password' minLength={7}/>
-                    <div id='passVisible' className='confirmPasswordUserPageVisibleBtn' onClick={showPassword}><BiShow size={25}></BiShow></div>
+                <div className='confirmPasswordCompanyPage'>
+                    <input type="password" className='inputEditFieldCompany' name="password" placeholder="Password" required id='password' minLength={7}/>
+                    <div id='passVisible' className='confirmPasswordCompanyPageVisibleBtn' onClick={showPassword}><BiShow size={25}></BiShow></div>
                 </div>
                 <span id='passwordErrorMessage' className='errorMessage'></span>
                 <div className="clr"></div>
@@ -189,34 +189,34 @@ const UserProfile = (user) => {
 
     const changeFirstName = (event) => {
         setFirstName(event.target.value);
-        user.user.firstName = event.target.value;
+        company.company.firstName = event.target.value;
     }
 
     const changeLastName = (event) => {
         setLastName(event.target.value);
-        user.user.lastName = event.target.value;
+        company.company.lastName = event.target.value;
     }
 
-    const changeNickName = (event) => {
-        setNickName(event.target.value);
-        user.user.nickName = event.target.value;
+    const changeName = (event) => {
+        setName(event.target.value);
+        company.company.name = event.target.value;
     }
 
     const changeGender = (event) => {
         setGender(event.target.value);
-        user.user.gender = event.target.value;
+        company.company.gender = event.target.value;
     }
 
     const changeCountry = (event) => {
         setCountry(event.target.value);
-        user.user.country = event.target.value;
+        company.company.country = event.target.value;
     }
 
-    const renderEditUserInformation = () => {
+    const renderEditCompanyInformation = () => {
         return (
             <div>
                 
-                <div className="editUserPart">
+                <div className="editCompanyPart">
                     <label className="fl"> 
                         First Name: 
                     </label>
@@ -224,13 +224,13 @@ const UserProfile = (user) => {
                         <i className="fa fa-user" aria-hidden="true"></i>
                     </div>
                     <div className="fr">
-                        <input type="text" name="firstName" className='inputEditFieldUser' placeholder="First Name" value={user.user.firstName || ''} onChange={changeFirstName} id='editFirstName' minLength={2}/>
+                        <input type="text" name="firstName" className='inputEditFieldCompany' placeholder="First Name" value={company.company.firstName || ''} onChange={changeFirstName} id='editFirstName' minLength={2}/>
                     </div> 
                     <span id='editFirstNameErrorMessage' className='errorMessage'></span>
                     <div className="clr"></div>
                 </div>
 
-                <div className="editUserPart">
+                <div className="editCompanyPart">
                     <label className="fl"> 
                         Last Name: 
                     </label>
@@ -238,41 +238,41 @@ const UserProfile = (user) => {
                         <i className="fa fa-user" aria-hidden="true"></i>
                     </div>
                     <div className="fr">
-                        <input type="text" name="lastName" className='inputEditFieldUser' placeholder="Last Name" value={user.user.lastName || ''} onChange={changeLastName} id='editLastName' minLength={2}/>
+                        <input type="text" name="lastName" className='inputEditFieldCompany' placeholder="Last Name" value={company.company.lastName || ''} onChange={changeLastName} id='editLastName' minLength={2}/>
                     </div> 
                     <span id='editLastNameErrorMessage' className='errorMessage'></span>
                     <div className="clr"></div>
                 </div>
 
-                <div className="editUserPart">
+                <div className="editCompanyPart">
                     <label className="fl"> 
-                        Nick Name: 
+                        Name: 
                     </label>
                     <div className="new iconBox">
                         <i className="fa fa-user" aria-hidden="true"></i>
                     </div>
                     <div className="fr">
-                        <input type="text" name="nickName" className='inputEditFieldUser' placeholder="Nick Name" value={user.user.nickName || ''} onChange={changeNickName} id='editNickName' minLength={3}/>
+                        <input type="text" name="name" className='inputEditFieldCompany' placeholder="Name" value={company.company.name || ''} onChange={changeName} id='editName' minLength={3}/>
                     </div> 
-                    <span id='editNickNameErrorMessage' className='errorMessage'></span>
+                    <span id='editNameErrorMessage' className='errorMessage'></span>
                     <div className="clr"></div>
                 </div>
 
-                <div className="editUserPart">
+                <div className="editCompanyPart">
                     <input type="radio" name="Gender" value="Male" id='genderMale' 
-                        checked={user.user.gender == 'Male' ? 'checked' : ''}
+                        checked={company.company.gender == 'Male' ? 'checked' : ''}
                         onChange={changeGender}
                     />
                     <label htmlFor="genderMale">Male</label>
                     <input type="radio" name="Gender" value="Female" id='genderFemale'
-                        checked={user.user.gender == 'Female' ? 'checked' : ''}
+                        checked={company.company.gender == 'Female' ? 'checked' : ''}
                         onChange={changeGender}
                     />
                     <label htmlFor="genderFemale">Female</label>
                 </div>
 
                 <div className="input_field select_option">
-                  <select id="editCountry" name="country" value={user.user.country} onChange={changeCountry}>
+                  <select id="editCountry" name="country" value={company.company.country} onChange={changeCountry}>
                     <option>Select country</option>
                     <option>Afghanistan</option>
                     <option>Aland Islands</option>
@@ -568,7 +568,7 @@ const UserProfile = (user) => {
                 <Typography sx={{ mt: 2, mb: 1 }}>
                     {stepsDescription[activeStep]}
                 </Typography>
-                {activeStep == 0 ? renderEditUserInformation() : <></>}
+                {activeStep == 0 ? renderEditCompanyInformation() : <></>}
                 {activeStep == 1 ? renderConfirmPassword() : <></>}
                 {activeStep == 2 ? renderConfirmUpdate() : <></>}
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
@@ -610,12 +610,12 @@ const UserProfile = (user) => {
     }
 
     return (
-        <div className="userProfile">
+        <div className="companyProfile">
             <h1>
                 Your Profile 
                 <CgProfile className='profileIcon' size={50}/>
             </h1>
-            <div className='userInformation'>
+            <div className='companyInformation'>
                 {
                     renderEditStepper()
                 }
@@ -624,4 +624,4 @@ const UserProfile = (user) => {
     );
 }
 
-export default UserProfile;
+export default CompanyProfile;

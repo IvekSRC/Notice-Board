@@ -2,6 +2,7 @@ const { Company } = require('../models');
 const { companyUpdateSchema } = require('../validators/index');
 const deleteFile = require('./picture.service');
 const { LOGO } = require('../constants/folderNames.constants');
+const bcrypt = require('bcrypt');
 
 const getCompanys =  async () => {
     return await Company.find({});
@@ -68,11 +69,29 @@ const deleteLogo = async (id, logo) => {
     }
 }
 
+const confirmCompanyPassword = async (email, passwordForTest) => {
+  const company = await Company.findOne({ email: email }).select("password");
+  
+  if (!company) {
+    throw new Error("Can't found.");
+  }
+  else {
+    const isMatch = await bcrypt.compare(passwordForTest, company.password);
+
+    if (!isMatch) {
+      return false;
+    }
+
+    return true;
+  }
+}
+
 module.exports = {
     getCompanys,
     getCompany,
     updateCompany,
     deleteCompany,
     addLogo,
-    deleteLogo
+    deleteLogo,
+    confirmCompanyPassword
 };

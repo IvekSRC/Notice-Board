@@ -6,7 +6,8 @@ const {
     updateCompany,
     deleteCompany,
     addLogo,
-    deleteLogo
+    deleteLogo,
+    confirmCompanyPassword
 } = require('../services/company.service');
 const { LOGO } = require('../constants/folderNames.constants');
 const upload = require('../middlewares/upload.middleware');
@@ -139,6 +140,39 @@ router.delete(
 
     await deleteLogo(id, LOGO);
     res.status(404).json('Logo deleted succesfully.');
+  }
+);
+
+// Confirm Company Password
+router.get(
+  '/companys/confirmPassword/:password',
+  authForCompany,
+  async (req, res) => {
+    const { company: { email }, params: { password } } = req;
+
+    try {
+      var response = {
+        message: String,
+        isValid: Boolean
+      }
+
+      const isValid = await confirmCompanyPassword(email, password);
+
+      if(isValid == true) {
+        response.message = "Succesfully";
+        response.isValid = true;
+
+        res.json(response);
+      } else {
+        response.message = "Password do not match";
+        response.isValid = false;
+
+        res.json(response);
+      }
+    }
+    catch (error) {
+      res.status(404).json(error.message);
+    }
   }
 );
 

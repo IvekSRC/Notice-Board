@@ -11,14 +11,10 @@ const ProfileUser = () => {
     const getApiData = async () => {
         var response;
         var id;
-        const entity = localStorage.getItem('loggedEntity');
 
-        if(entity == 'user') {
+        if(localStorage.getItem('loggedEntity') == 'user') {
             id = localStorage.getItem('userId');
             response = await (await fetchData(`users/${id}`)).json();
-        } else if(entity == 'company') {
-            id = localStorage.getItem('companyId');
-            response = await (await fetchData(`companys/${id}`)).json();
         }
         
         setLoggedEntity(response);
@@ -31,7 +27,7 @@ const ProfileUser = () => {
     <>
       <div className="profileUser">
         <NavigationBar/>
-        <UserProfile user={loggedEntity} originalUser={loggedEntity}/>
+        <UserProfile user={loggedEntity}/>
         <UserFavoritesAnnouncements user={loggedEntity}/>
       </div>
     </>
