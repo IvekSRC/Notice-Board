@@ -1,4 +1,4 @@
-const { Company } = require('../models');
+const { Company, Announcement } = require('../models');
 const { companyUpdateSchema } = require('../validators/index');
 const deleteFile = require('./picture.service');
 const { LOGO } = require('../constants/folderNames.constants');
@@ -86,6 +86,21 @@ const confirmCompanyPassword = async (email, passwordForTest) => {
   }
 }
 
+const isMyAnnouncement = async (id, idAnnouncement) => {
+  const announcement = await Announcement.findById(idAnnouncement);
+  
+  if (!announcement) {
+    throw new Error("Can't found.");
+  }
+  else {
+    if(announcement.companyId._id.toString() != id.toString()) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+}
+
 module.exports = {
     getCompanys,
     getCompany,
@@ -93,5 +108,6 @@ module.exports = {
     deleteCompany,
     addLogo,
     deleteLogo,
-    confirmCompanyPassword
+    confirmCompanyPassword,
+    isMyAnnouncement
 };

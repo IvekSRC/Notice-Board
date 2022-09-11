@@ -2,6 +2,7 @@ import NavigationBar from "../components/navigationBar.component";
 import { useEffect, useState } from "react";
 import { fetchData } from "../services/fetch.service";
 import CompanyProfile from "../components/profileCompany.component";
+import AnnouncementsOfCompany from "../components/announcementsOfCompany.component";
 
 const ProfileCompany = () => {
   const [loggedEntity, setLoggedEntity] = useState([]);
@@ -26,6 +27,7 @@ const ProfileCompany = () => {
         <div className="profileCompany">
             <NavigationBar/>
             <CompanyProfile company={loggedEntity}/>
+            <AnnouncementsOfCompany company={loggedEntity}/>
         </div>
       </>
     )

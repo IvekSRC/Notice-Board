@@ -1158,6 +1158,11 @@ body {
   margin-top: 3%;
 }
 
+.modalHeader {
+  width: 500px;
+  text-align: center;
+}
+
 .errorMessageExtendTime {
   color: rgb(185, 0, 0);
   margin: 5% 3% 3% 3%;
@@ -1292,4 +1297,19 @@ body {
 .companyInformation {
   display: flex;
   flex-direction: column;
+}
+
+/* Edit modal */
+
+.editAnn {
+  background-color: #fff9ea;
+}
+
+.editAnnouncementForm {
+  width: 80%;
+  border: 5px solid #f5ba1a;
+}
+
+.changeFieldAnn {
+  border: 2px solid #f5ba1a;
 }

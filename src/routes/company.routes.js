@@ -7,7 +7,8 @@ const {
     deleteCompany,
     addLogo,
     deleteLogo,
-    confirmCompanyPassword
+    confirmCompanyPassword,
+    isMyAnnouncement
 } = require('../services/company.service');
 const { LOGO } = require('../constants/folderNames.constants');
 const upload = require('../middlewares/upload.middleware');
@@ -169,6 +170,26 @@ router.get(
 
         res.json(response);
       }
+    }
+    catch (error) {
+      res.status(404).json(error.message);
+    }
+  }
+);
+
+// Is my annoucement
+router.get(
+  '/companys/announcements/isMy/:idAnnouncement',
+  authForCompany,
+  async (req, res) => {
+    const {company: { id }, params: { idAnnouncement } } = req;
+
+    try {
+      const isMyItem = await isMyAnnouncement(id, idAnnouncement);
+
+      res.json({
+        isMyItem: isMyItem
+      })
     }
     catch (error) {
       res.status(404).json(error.message);

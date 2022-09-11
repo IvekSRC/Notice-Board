@@ -2,24 +2,34 @@ import { fetchData } from "../services/fetch.service";
 import { useState, useEffect } from "react";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
+import { MdDriveFileRenameOutline, MdFavorite, MdFavoriteBorder, MdOutlineCategory, MdOutlineDescription } from 'react-icons/md';
 import SendIcon from '@mui/icons-material/Send';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { BiTimeFive } from "react-icons/bi";
+import { validateRequiredField } from '../validators/requiredField.validator';
 
 const Announcement = (announcement) => {
     const [picture, setPicture] = useState();
     const [open, setOpen] = React.useState(false);
     const [isAdded, setIsAdded] = useState(false);
     const [deleteModal, setDeleteModal] = React.useState(false);
+    const [editModal, setEditModal] = React.useState(false);
+    const [isMyItem, setIsMyItem] = useState(false);
+
+    const [name, setName] = useState(announcement.announcement.name);
+    const [category, setCategory] = useState(announcement.announcement.category);
+    const [description, setDescription] = useState(announcement.announcement.description);
+    const [endTime, setEndTime] = useState(announcement.announcement.endTime);
 
     useEffect(() => {
         const getApiData = async () => {
@@ -28,10 +38,13 @@ const Announcement = (announcement) => {
             const imageObjectURL = URL.createObjectURL(imageBlob);
             setPicture(imageObjectURL);
 
+            const token = localStorage.getItem('token');
             if(localStorage.getItem('loggedEntity') == 'user') {
-                const token = localStorage.getItem('token');
                 const res = await (await fetchData(`announcements/favorites/get/${announcement.announcement._id}`, 'GET', undefined, token)).json();
                 setIsAdded(res.isAdded);
+            } else if(localStorage.getItem('loggedEntity') == 'company') {
+                const res = await (await fetchData(`companys/announcements/isMy/${announcement.announcement._id}`, 'GET', undefined, token)).json();
+                setIsMyItem(res.isMyItem);
             }
         }
 
@@ -48,6 +61,8 @@ const Announcement = (announcement) => {
     const handleClose = () => setOpen(false);
     const handleClickOpen = () => { setDeleteModal(true); };
     const handleClickClose = () => { setDeleteModal(false); };
+    const handleClickOpenEdit = () => { setEditModal(true); };
+    const handleClickCloseEdit = () => { setEditModal(false); };
 
     const addToFavorites = async () => {
         const token = localStorage.getItem('token');
@@ -114,6 +129,51 @@ const Announcement = (announcement) => {
         }
     }
 
+    const editAnnouncement = async () => {
+        if(isValidChanges() == false) {
+            return;
+        }
+
+        const updatedAnnouncement = {
+            name: name,
+            category: category,
+            description: description,
+            endTime: endTime
+        }
+        
+        const token = localStorage.getItem('token');
+        await fetchData(`announcements/${announcement.announcement._id}`, 'PATCH', updatedAnnouncement, token);
+        window.location.reload(false);
+    }
+
+    const isValidChanges = () => {
+        const name = document.getElementById('createName');
+        const nameErrorField = document.getElementById('nameErrorMessage');
+
+        var isValid = true;
+        if(validateRequiredField(name, 2, nameErrorField) == false) {
+          isValid = false;
+        }
+
+        return isValid;
+    }
+
+    const changeName = (event) => {
+        setName(event.target.value);
+    }
+
+    const changeCategory = (event) => {
+        setCategory(event.target.value);
+    }
+
+    const changeDescription = (event) => {
+        setDescription(event.target.value);
+    }
+
+    const changeEndTime = (event) => {
+        setEndTime(event.target.value);
+    }
+
     return (
         <>
             <div className="announcementName">
@@ -151,7 +211,7 @@ const Announcement = (announcement) => {
                 }
             </div>
             <div className='seeMoreDetails'>
-                <Button onClick={handleOpen}>See more details</Button>
+                <Button onClick={handleOpen}>See more</Button>
                 <Modal
                     open={open}
                     onClose={handleClose}
@@ -166,7 +226,7 @@ const Announcement = (announcement) => {
                         Description: {announcement.announcement.description}
                     </Typography>
                     {
-                        (localStorage.getItem('loggedEntity') == 'company' && isExpireInThreeDays(new Date(announcement.announcement.endTime))) == true ?
+                        isMyItem == true ?
                         <div className="modalExpireEndTime">
                             <Typography className="displayPropValueExpire">
                                 Your announcement expire in {` ${new Date(announcement.announcement.endTime).toDateString()}`}
@@ -186,13 +246,66 @@ const Announcement = (announcement) => {
                             </div>
                         </div>
                         :
-                        <></>
+                        <Typography className="displayPropValueExpire">
+                            Announcement expire in {` ${new Date(announcement.announcement.endTime).toDateString()}`}
+                        </Typography>
                     }
                     </Box>
                 </Modal>
                 {
                     localStorage.getItem('loggedEntity') == 'company' && localStorage.getItem('companyId') == announcement.announcement.companyId ?
                     <div>
+                        <IconButton aria-label="edit" onClick={handleClickOpenEdit}>
+                            <EditIcon />
+                        </IconButton>
+                        <Dialog
+                            open={editModal}
+                            onClose={handleClickCloseEdit}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title" className="modalHeader editAnn">
+                                {"Edit Announcement"}
+                            </DialogTitle>
+                            <DialogContent className="editAnn">
+                            <div className="createAnnouncementForm editAnnouncementForm">
+                                <div className="form_container">
+                                    <div className="row clearfixx">
+                                        <div className='registerUserForm'>
+                                            <form className='registerUserForm'>
+                                                <div className="input_field changeFieldAnn"> <span><i aria-hidden="true" className="fa fa-user"><MdDriveFileRenameOutline className='registrationIcon'/></i></span>
+                                                    <input type="text" name="name" placeholder="Name" value={name} onChange={changeName} required id='createName' minLength={3}/>
+                                                </div>
+                                                <span id='nameErrorMessage' className='errorMessage'></span>
+                                                <div className="input_field changeFieldAnn"> <span><i aria-hidden="true" className="fa fa-user"><MdOutlineCategory className='registrationIcon'/></i></span>
+                                                    <select id="createCategory" name="cetegory" placeholder='Category' required value={category} onChange={changeCategory}>
+                                                        <option value="Putovanje">Putovanje</option>
+                                                        <option value="Posao">Posao</option>
+                                                        <option value="Prodaja">Prodaja</option>
+                                                        <option value="Usluga">Usluga</option>
+                                                        <option value="Dogadjaj">Dogadjaj</option>
+                                                        <option value="Objava">Objava</option>
+                                                    </select>
+                                                </div>
+                                                <div className="input_field changeFieldAnn"> <span><i aria-hidden="true" className="fa fa-user"><MdOutlineDescription className='registrationIcon'/></i></span>
+                                                    <input type="text" name="description" placeholder="Description" value={description} onChange={changeDescription} id='createDescription' maxLength={500}/>
+                                                </div>
+                                                <div className="input_field changeFieldAnn"> <span><i aria-hidden="false" className="fa fa-envelope"><BiTimeFive className='registrationIcon'/></i></span>
+                                                    <input type="date" name="endTime" required id='createEndTime' value={endTime} onChange={changeEndTime} placeholder="Announcement expired date"/>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </DialogContent>
+                            <DialogActions className="editAnn">
+                                <Button onClick={handleClickCloseEdit}>Cancel</Button>
+                                <Button onClick={editAnnouncement} autoFocus>
+                                    Confirm
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                         <IconButton aria-label="delete" onClick={handleClickOpen}>
                             <DeleteIcon />
                         </IconButton>
@@ -202,8 +315,8 @@ const Announcement = (announcement) => {
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                         >
-                            <DialogTitle id="alert-dialog-title">
-                            {"Confirm delete modal"}
+                            <DialogTitle id="alert-dialog-title" className="modalHeader">
+                                {"Confirm delete modal"}
                             </DialogTitle>
                             <DialogContent>
                             <DialogContentText id="alert-dialog-description">
