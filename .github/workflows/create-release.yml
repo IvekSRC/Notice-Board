@@ -8,7 +8,9 @@ jobs:
     name: Create GitHub Release
     runs-on: windows-latest
     steps:
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-         prerelease: false
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Create Release
+        run: gh release create ${{ github.ref }} --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
