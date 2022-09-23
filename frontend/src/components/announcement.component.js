@@ -223,10 +223,10 @@ const Announcement = (announcement) => {
                         {announcement.announcement.name}
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        Description: {announcement.announcement.description}
+                        {announcement.announcement.description}
                     </Typography>
                     {
-                        isMyItem == true ?
+                        isMyItem == true && isExpireInThreeDays(new Date(announcement.announcement.endTime)) == true ?
                         <div className="modalExpireEndTime">
                             <Typography className="displayPropValueExpire">
                                 Your announcement expire in {` ${new Date(announcement.announcement.endTime).toDateString()}`}
