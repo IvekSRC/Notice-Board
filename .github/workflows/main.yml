@@ -13,7 +13,10 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y/%m/%d at %H:%M')"
+      - name: Get current time
+        id: time
+        run: echo "::set-output name=time::$(time +'%H:%M')"
       - name: Create Release
-        run: gh release create ${{ steps.date.outputs.date }} --generate-notes
+        run: gh release create ${{ steps.time.outputs.time }} --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
