@@ -1,0 +1,18 @@
+on:
+  push:
+    tags:
+      - '*'
+
+name: Create Release
+
+jobs:
+  create-github-release:
+    name: Create GitHub Release
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Create Release
+        run: gh release create ${{ github.ref }} --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
