@@ -17,6 +17,6 @@ jobs:
         id: time
         run: echo "::set-output name=time::$(date +'%H:%M')"
       - name: Create Release
-        run: gh release create ${{ steps.time.outputs.date }} --generate-notes
+        run: gh release create ${{ steps.time.outputs.time }} --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
