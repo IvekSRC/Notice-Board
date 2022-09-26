@@ -12,11 +12,11 @@ jobs:
         uses: actions/checkout@v3
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y/%m/%d at %H:%M')"
+        run: echo "::set-output name=date::$(date +'%Y/%m/%d at %H/%M')"
       - name: Get current time
         id: time
         run: echo "::set-output name=time::$(date +'%H:%M')"
       - name: Create Release
-        run: gh release create ${{ steps.time.outputs.time }} --generate-notes
+        run: gh release create ${{ steps.time.outputs.date }} --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
