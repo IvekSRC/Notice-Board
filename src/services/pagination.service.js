@@ -14,13 +14,13 @@ const getPaginated = async (Model, req, res) => {
     if(sortProps != undefined && sortOrder != undefined && sortProps.length == sortOrder.length) {
       isSortable = sortProps.every((sortBy) => sortable.includes(sortBy));
     }
-    
+    console.log(searchByTags);
     var query;
     if(searchByTags) {
       query = Model.find(
         {
           ...parentReference, 
-          tags: { $in: searchByTags } 
+          tags: { $all: searchByTags }
         }
       ).limit(limit).skip(skip);
     } else {

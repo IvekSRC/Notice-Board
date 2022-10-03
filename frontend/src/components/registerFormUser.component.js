@@ -422,10 +422,10 @@ const RegisterForm = () => {
                   <input type="checkbox" id="cb1"/>
               <label htmlFor="cb1" id='termsLabel'>I agree with terms and conditions</label>
                 </div>
-                <div className="input_field checkbox_option">
+                {/* <div className="input_field checkbox_option">
                   <input type="checkbox" id="cb2"/>
               <label htmlFor="cb2">I want to receive the newsletter</label>
-                </div>
+                </div> */}
               <input className="button registerCompanyButton" type="button" value="Register" onClick={registerUser}/>
             </form>
           </div>

@@ -91,7 +91,7 @@ const Home = () => {
                     className="sortBy"
                     options={[
                         "Name",
-                        "Status",
+                        "Category",
                         "End Time"
                     ]}
                     sx={{ width: 300 }}
