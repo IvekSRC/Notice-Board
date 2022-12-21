@@ -11,11 +11,13 @@ const {
     deletePicture,
     getPicture,
     getAnnouncement,
+    getAllAnnouncements,
     getTags,
     addToFavorites,
     removeFromFavorites,
     isAddedToFavorites,
-    extendAnnouncement
+    extendAnnouncement,
+    matchedAnnouncements
 } = require('../services/announcement.service');
 const { getPaginated } = require('../services/pagination.service');
 const { Announcement } = require('../models');
@@ -78,6 +80,25 @@ router.get('/announcements', async (req, res) => {
       res.status(500).json();
     }
 });
+
+// Get Announcement - Full text search
+router.get('/announcements/search', async (req, res) => {
+  const search = req.query.search;
+
+  try {
+    var results;
+
+    if(search == '' || search == null) {
+      results = await getAllAnnouncements();
+    } else {     
+      results = await matchedAnnouncements(search);
+    }
+
+    return res.status(200).json(results);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+})
 
 // Get Announcement
 router.get('/announcements/:id', async (req, res) => {

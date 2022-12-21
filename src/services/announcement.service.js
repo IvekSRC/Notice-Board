@@ -52,6 +52,10 @@ const getAnnouncement =  async (announcementId) => {
     return await Announcement.findById({ _id: announcementId });
 }
 
+const getAllAnnouncements = async () => {
+  return await Announcement.find();
+}
+
 const getMyAnnouncement = async (idOfCompany) => {
     return await Announcement.find({ companyId: idOfCompany });
 }
@@ -201,10 +205,19 @@ const extendAnnouncement = async (companyId, idAnnouncement, newTime) => {
   return null;
 }
 
+const matchedAnnouncements = async (search) => {
+  const result = await Announcement.aggregate([
+    { $match: { $text: { $search: search } } }
+  ])
+
+  return result;
+}
+
 module.exports = {
     createAnnouncement,
     updateAnnouncement,
     getAnnouncement,
+    getAllAnnouncements,
     getMyAnnouncement,
     deleteAnnouncement,
     addPicture,
@@ -214,5 +227,6 @@ module.exports = {
     addToFavorites,
     removeFromFavorites,
     isAddedToFavorites,
-    extendAnnouncement
+    extendAnnouncement,
+    matchedAnnouncements
 };
