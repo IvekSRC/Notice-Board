@@ -5,6 +5,7 @@ const announcementService = require('./announcement.service');
 const expiresAnnouncement = require('./cron.service');
 const getPaginated = require('./pagination.service');
 const deleteFile = require('./picture.service');
+const speechToText = require('./speechToText');
 
 module.exports = {
     authService,
@@ -13,5 +14,6 @@ module.exports = {
     announcementService,
     expiresAnnouncement,
     getPaginated,
-    deleteFile
+    deleteFile,
+    speechToText
 }
