@@ -1084,11 +1084,42 @@ body {
   border: 1px solid #105186;
   border-left: 5px solid #2196F3;
   border-radius: 10px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin: 2%;
+  margin-bottom: 0%;
+  border-bottom: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.sortingPartFullBorder {
+  border: 1px solid #105186;
+  border-left: 5px solid #2196F3;
+  border-radius: 10px;
   margin: 2%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+}
+
+.searchingPart {
+  border: 1px solid #105186;
+  border-left: 5px solid #2196F3;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  margin: 2%;
+  margin-top: 0%;
+  border-top: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 1%;
 }
 
 .sortBy, .sortOrder, .sortByTags {
@@ -1312,4 +1343,105 @@ body {
 
 .changeFieldAnn {
   border: 2px solid #f5ba1a;
+}
+
+/* Search */
+
+
+
+.mircophone-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.microphone-icon-container {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-image: linear-gradient(128deg, #ffffff, #647c88);
+  padding: 10px;
+  margin-right: 20px;
+  margin-left: 20px;
+  position: relative;
+  cursor: pointer;
+}
+
+.microphone-icon-container.listening::before {
+  content: "";
+  width: 100px;
+  height: 100px;
+  background-color: #ffffff81;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform:translate(-50%, -50%) scale(1.4);
+  border-radius: 50%;
+  animation: listening infinite 1.5s;
+}
+
+@keyframes listening{
+  0%{
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100%{
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.4);
+  }
+}
+
+.microphone-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.microphone-status {
+  font-size: 22px;
+  margin-right: 20px;
+  min-width: 215px;
+}
+
+.microphone-btn {
+  border: none;
+  padding: 10px 30px;
+  margin-right: 10px;
+  outline: none;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 25px;
+  box-shadow: 0px 0px 10px 5px #ffffff1a;
+}
+
+.microphone-result-text {
+  margin-bottom: 30px;
+  text-align: center;
+  overflow-y: auto;
+}
+
+.searchBtn {
+  position: relative;
+  top: 7px;
+  right: 10px;
+  color: #717374;
+}
+
+.searchBtn:hover {
+  color: black;
+}
+
+.searchPart {
+  border: 3px solid black;
+  border-radius: 35px;
+}
+
+.searchParam {
+  background: transparent;
+  border: none;
+  padding: 10px;
+  width: 75%;
+}
+
+.searchParam:focus {
+  outline: none;
 }

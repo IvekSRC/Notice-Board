@@ -41,7 +41,7 @@ const UserFavoritesAnnouncements = (user) => {
     const renderAnnouncements = (listOfAnnouncements) => {
         return (
             <div className="homePage">
-                <div className="sortingPart">
+                <div className="sortingPartFullBorder">
                     { renderFilterPart() }
                 </div>
                 <div className="announcements">

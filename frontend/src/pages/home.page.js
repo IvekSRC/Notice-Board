@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import NavigationBar from "../components/navigationBar.component";
 import { fetchData } from "../services/fetch.service";
 import { useState, useEffect } from "react";
@@ -11,6 +11,9 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import PageviewIcon from '@mui/icons-material/Pageview';
 import { blue } from '@mui/material/colors';
+import { FaMicrophone } from 'react-icons/fa';
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import SearchIcon from '@mui/icons-material/Search';
 
 const Home = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -25,6 +28,10 @@ const Home = () => {
     const [sortBy, setSortBy] = useState('_id');
     const [sortOrder, setSortOrder] = useState(1);
     const [displayOption, setDisplayOption] = useState(-1);
+    const microphoneRef = useRef(null);
+    const [isListening, setIsListening] = useState(false);
+    const { transcript, resetTranscript } = useSpeechRecognition();
+    const [searchParam, setSearchParam] = useState(null);
 
     useEffect(() => {
         const getApiData = async () => {
@@ -33,6 +40,9 @@ const Home = () => {
                 searchByTags.forEach((tag, index) => {
                     sortCriterium += `&searchByTags[${index}]=${tag}`
                 });
+            }
+            if(searchParam) {
+                sortCriterium += `&search=${searchParam}`
             }
 
             var fetchAnnouncements = await (await fetchData(`announcements${sortCriterium}`)).json();
@@ -58,13 +68,16 @@ const Home = () => {
         }
 
         getApiData();
-    }, [rowsPerPage, page, sortBy, sortOrder, searchByTags, displayOption]);
+    }, [rowsPerPage, page, sortBy, sortOrder, searchByTags, displayOption, searchParam]);
 
     const renderAnnouncements = (listOfAnnouncements) => {
         return (
             <div className="homePage">
                 <div className="sortingPart">
                     { renderFilterPart() }
+                </div>
+                <div className="searchingPart">
+                    { renderSearchPart() }
                 </div>
                 <div className="announcements">
                     {listOfAnnouncements.map((announcement) => (
@@ -150,6 +163,56 @@ const Home = () => {
             </>
         )
     }
+
+    const renderSearchPart = () => {
+        return (
+            <div className="microphone-wrapper">
+                <div className="mircophone-container">
+                    <div className="searchPart">
+                        <input type="text" placeholder="Search" className="searchParam" id="searchParam"/>
+                        <SearchIcon className="searchBtn" onClick={changeSearchParam}/>
+                    </div>
+                    <div className="microphone-icon-container" ref={microphoneRef} onClick={handleListing}>
+                        <FaMicrophone className='microphone-icon'/>
+                    </div>
+                    <div className="microphone-status">
+                        {isListening ? "Listening ............." : "Click to start Listening"}
+                    </div>
+                    {isListening && (
+                        <button className="microphone-stop microphone-btn" onClick={stopHandle}>
+                            Stop
+                        </button>
+                    )}
+                </div>
+            </div>
+        )
+    }
+
+    const changeSearchParam = () => {
+        const search = document.getElementById('searchParam').value;
+        setSearchParam(search);
+    }
+
+    const handleListing = () => {
+        handleReset();
+        setIsListening(true);
+        microphoneRef.current.classList.add("listening");
+        SpeechRecognition.startListening({
+            continuous: true,
+        });
+    };
+
+    const stopHandle = () => {
+        setIsListening(false);
+        microphoneRef.current.classList.remove("listening");
+        SpeechRecognition.stopListening();
+        document.getElementById('searchParam').value = transcript;
+    };
+
+    const handleReset = () => {
+        stopHandle();
+        resetTranscript();
+    };
 
     const changeDisplayAnnouncements = () => {
         setDisplayOption(displayOption * (-1));

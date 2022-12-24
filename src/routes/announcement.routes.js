@@ -24,6 +24,7 @@ const { Announcement } = require('../models');
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
+const { transcript } = require('../services/speechToText.js');
 
 // Create Announcement
 router.post('/announcements', authForCompany, async (req, res) => {
