@@ -39,10 +39,10 @@ const Announcement = (announcement) => {
             setPicture(imageObjectURL);
 
             const token = localStorage.getItem('token');
-            if(localStorage.getItem('loggedEntity') == 'user') {
+            if(localStorage.getItem('loggedEntity') === 'user') {
                 const res = await (await fetchData(`announcements/favorites/get/${announcement.announcement._id}`, 'GET', undefined, token)).json();
                 setIsAdded(res.isAdded);
-            } else if(localStorage.getItem('loggedEntity') == 'company') {
+            } else if(localStorage.getItem('loggedEntity') === 'company') {
                 const res = await (await fetchData(`companys/announcements/isMy/${announcement.announcement._id}`, 'GET', undefined, token)).json();
                 setIsMyItem(res.isMyItem);
             }
@@ -130,7 +130,7 @@ const Announcement = (announcement) => {
     }
 
     const editAnnouncement = async () => {
-        if(isValidChanges() == false) {
+        if(isValidChanges() === false) {
             return;
         }
 
@@ -151,7 +151,7 @@ const Announcement = (announcement) => {
         const nameErrorField = document.getElementById('nameErrorMessage');
 
         var isValid = true;
-        if(validateRequiredField(name, 2, nameErrorField) == false) {
+        if(validateRequiredField(name, 2, nameErrorField) === false) {
           isValid = false;
         }
 
@@ -183,7 +183,7 @@ const Announcement = (announcement) => {
             </div>
             {
                 <div className="divForImage">
-                    <img src={picture} className="announcementPicture"/>
+                    <img src={picture} alt="Announcement" className="announcementPicture"/>
                 </div>
             }
             <p className="displayProp">
@@ -193,14 +193,14 @@ const Announcement = (announcement) => {
                 </span>
             </p>
             <p className="displayProp">
-                Created in
+                Created:
                 <span className="displayPropValue">
                     {` ${new Date(announcement.announcement.startTime).toDateString()}`}
                 </span>
             </p>
             <div>
                 {
-                    isExpireInThreeDays(new Date(announcement.announcement.endTime)) == true ?
+                    isExpireInThreeDays(new Date(announcement.announcement.endTime)) === true ?
                     <div className="endTimeExpire">
                         Expire in 3 days
                     </div>
@@ -226,7 +226,7 @@ const Announcement = (announcement) => {
                         {announcement.announcement.description}
                     </Typography>
                     {
-                        isMyItem == true && isExpireInThreeDays(new Date(announcement.announcement.endTime)) == true ?
+                        isMyItem === true && isExpireInThreeDays(new Date(announcement.announcement.endTime)) === true ?
                         <div className="modalExpireEndTime">
                             <Typography className="displayPropValueExpire">
                                 Your announcement expire in {` ${new Date(announcement.announcement.endTime).toDateString()}`}
@@ -253,7 +253,7 @@ const Announcement = (announcement) => {
                     </Box>
                 </Modal>
                 {
-                    localStorage.getItem('loggedEntity') == 'company' && localStorage.getItem('companyId') == announcement.announcement.companyId ?
+                    localStorage.getItem('loggedEntity') === 'company' && localStorage.getItem('companyId') === announcement.announcement.companyId ?
                     <div>
                         <IconButton aria-label="edit" onClick={handleClickOpenEdit}>
                             <EditIcon />
@@ -333,11 +333,11 @@ const Announcement = (announcement) => {
                     </div> : <></>
                 }
                 {
-                    localStorage.getItem('loggedEntity') == 'user' && isAdded == true ?
+                    localStorage.getItem('loggedEntity') === 'user' && isAdded === true ?
                     <MdFavorite className='favorites' onClick={removeFromFavorites}/> : <></>
                 }
                 {
-                    localStorage.getItem('loggedEntity') == 'user' && isAdded == false ?
+                    localStorage.getItem('loggedEntity') === 'user' && isAdded === false ?
                     <MdFavoriteBorder className='favorites' onClick={addToFavorites}/> : <></>
                 }
             </div>

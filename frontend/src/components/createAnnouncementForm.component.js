@@ -6,6 +6,9 @@ import { validateRequiredField } from '../validators/requiredField.validator';
 import { Autocomplete, TextField } from "@mui/material";
 import Chip from '@mui/material/Chip';
 import { useState } from "react";
+import '@tensorflow/tfjs-backend-cpu';
+import '@tensorflow/tfjs-backend-webgl';
+// import * as cocoSsd from '@tensorflow-models/coco-ssd'
 
 const CreateAnnouncementForm = (tags) => {
     const [selectedTags, setTags] = useState([]);
@@ -29,13 +32,13 @@ const CreateAnnouncementForm = (tags) => {
 
         // Validation - Required Data
         var isValid = true;
-        if(validateRequiredField(name, 3, nameErrorField) == false) {
+        if(validateRequiredField(name, 3, nameErrorField) === false) {
           isValid = false;
         }
-        if(validateRequiredField(endTime) == false) {
+        if(validateRequiredField(endTime) === false) {
           isValid = false;
         }
-        if(validateRequiredField(image) == false) {
+        if(validateRequiredField(image) === false) {
           isValid = false;
         }
 
@@ -43,14 +46,14 @@ const CreateAnnouncementForm = (tags) => {
 
         var termsChecked = document.getElementById('cb1');
         var termsLabel = document.getElementById('termsLabel');
-        if(termsChecked.checked == false) {
+        if(termsChecked.checked === false) {
           termsLabel.style.color = "red";
           isValid = false;
         } else {
           termsLabel.style.color = "black";
         }
         
-        if(isValid == false) {
+        if(isValid === false) {
           return;
         }
 
@@ -92,6 +95,25 @@ const CreateAnnouncementForm = (tags) => {
       const endTime = document.getElementById('createEndTime');
       endTime.type = 'date';
     }
+
+    /*
+    const generateTags = async () => {
+      const img = document.querySelector('#createImage').files[0];
+      const url = URL.createObjectURL(img);
+      const image = new Image();
+      image.onload = function() {
+        URL.revokeObjectURL(this.src);
+      };
+      image.src = url;
+      
+      const model = await cocoSsd.load();
+      const predictions = await model.detect(image);
+    }
+
+    const toPascalCase = (value) => {
+      return `${value[0].toUpperCase()}${value.slice(1).toLowerCase()}`;
+    }
+    */
 
     return (
       <div className="createAnnouncementForm">
