@@ -14,6 +14,7 @@ import { blue } from '@mui/material/colors';
 import { FaMicrophone } from 'react-icons/fa';
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const Home = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -170,6 +171,7 @@ const Home = () => {
                 <div className="mircophone-container">
                     <div className="searchPart">
                         <input type="text" placeholder="Search" className="searchParam" id="searchParam"/>
+                        <ClearIcon className="clearBtn" onClick={clearSearchParam}/>
                         <SearchIcon className="searchBtn" onClick={changeSearchParam}/>
                     </div>
                     <div className="microphone-icon-container" ref={microphoneRef} onClick={handleListing}>
@@ -188,6 +190,10 @@ const Home = () => {
         )
     }
 
+    const clearSearchParam = () => {
+        handleReset();
+    }
+
     const changeSearchParam = () => {
         const search = document.getElementById('searchParam').value;
         setSearchParam(search);
@@ -199,6 +205,7 @@ const Home = () => {
         microphoneRef.current.classList.add("listening");
         SpeechRecognition.startListening({
             continuous: true,
+            language: 'sr-SP'
         });
     };
 
