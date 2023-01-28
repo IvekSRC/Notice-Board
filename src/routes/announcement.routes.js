@@ -84,18 +84,35 @@ router.get('/announcements', async (req, res) => {
 
 // Get Announcement - Full text search
 router.get('/announcements/search', async (req, res) => {
-  const search = req.query.search;
+  const { search, audio } = req.query;
 
   try {
     var results;
 
-    if(search == '' || search == null) {
-      results = await getAllAnnouncements();
-    } else {     
-      results = await matchedAnnouncements(search);
+    if(audio == '' || audio == null) {
+      if(search == '' || search == null) {
+        results = await getAllAnnouncements();
+      } else {     
+        results = await matchedAnnouncements(search);
+      }
+    } else {
+      const transcriptedResult = transcript(audio);
+      results = await matchedAnnouncements(transcriptedResult.transcript);
     }
 
     return res.status(200).json(results);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+})
+
+// Transcript 
+router.get('/announcements/transcript', async (req, res) => {
+  const { audio } = req.query;
+
+  try {
+    const transcriptedValue = transcript(audio);
+    return res.status(200).json(transcriptedValue);
   } catch (error) {
     res.status(400).json(error.message);
   }
