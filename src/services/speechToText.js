@@ -1,9 +1,9 @@
 const { Leopard } = require('@picovoice/leopard-node');
-const { ACCESS_KEY } = require("../../config");
+const { ACCESS_KEY, AUDIO_PATH } = require("../../config");
 
 var transcript = (audioName) => {
     const handle = new Leopard(ACCESS_KEY);
-    const transcriptedSpeech = handle.processFile("C:/Users/ncoded/Desktop/Diplomski/Notice-Board/public/audios/" + audioName);
+    const transcriptedSpeech = handle.processFile(AUDIO_PATH + audioName);
     return transcriptedSpeech;
 }
 
