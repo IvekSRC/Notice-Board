@@ -174,7 +174,7 @@ const Home = () => {
                         <ClearIcon className="clearBtn" onClick={clearSearchParam}/>
                         <SearchIcon className="searchBtn" onClick={changeSearchParam}/>
                     </div>
-                    <div className="microphone-icon-container" ref={microphoneRef} onClick={handleListing}>
+                    <div className="microphone-icon-container" ref={microphoneRef} onClick={handleListening}>
                         <FaMicrophone className='microphone-icon'/>
                     </div>
                     <div className="microphone-status">
@@ -199,7 +199,7 @@ const Home = () => {
         setSearchParam(search);
     }
 
-    const handleListing = () => {
+    const handleListening = () => {
         handleReset();
         setIsListening(true);
         microphoneRef.current.classList.add("listening");
